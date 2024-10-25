@@ -1,7 +1,7 @@
 import os
 from openai import OpenAI
 
-client = OpenAI(api_key=os.environ.get("OPENAI"))
+client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
 
 # Give a personality to the AI model for each member of the team
 
@@ -56,8 +56,7 @@ messages.append({
         + "step-by-step recipe. Make sure the recipe is easy to "
         + "follow and includes a brief introduction if needed."
         + "c. Recipe Critiques and Improvement Suggestions: If the"
-        + "user shares a recipe about a dish they prepared,"
-        + "provide feedback and suggest possible improvements."
+        + "user shares a recipe, ingredients and instructions of a dish, don't send a new recipe, only provide critiques, and feedback based on your personality."
 })
 
 # messages.append(
