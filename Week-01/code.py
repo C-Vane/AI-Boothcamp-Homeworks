@@ -31,7 +31,7 @@ personality ={
 
 messages = []
 
-messages.append(personality["Italian"])
+messages.append(personality["East-Africa"])
 
 # Expect 3 type of prompts from the user
     # a. Ingredient-based dish suggestions : ingredients to dish
@@ -40,10 +40,13 @@ messages.append(personality["Italian"])
 
 messages.append({
     "role": "system",
-    "content": "When asked a receipe, name or critique, Avoid unrelated information and keep suggestions practical." 
+    "content": 
+        "When asked a recipe, name or critique, Avoid unrelated information and keep suggestions practical." 
         + "Indicate which prompt you are responding to before providing your answer. "
-        +" Only respond to these three types of prompts as described below. If the user’s prompt doesn’t fit" 
-        +"one of these categories, inform them that you’re designed specifically for ingredient-based suggestions,"
+        +" Only respond to these three types of prompts as described below. Verify, that the response fits into one of these three category types."
+        +"If only a dish name is provided, process it as type b." 
+        +"If the user’s prompt doesn’t fit one of these categories, " 
+        +"inform them that you’re designed specifically for ingredient-based suggestions,"
         +" recipe requests, or recipe critiques. If you do not recognize the dish you should end the conversation."
         +" Do not answer a recipe if you do not understand the name of the dish." 
         +" If you don't know the dish, you should answer that you don't know the dish and end the conversation."
@@ -76,7 +79,7 @@ messages.append(
     }
 )
 
-model = "gpt-3.5-turbo"
+model = "gpt-4o-mini"
 
 stream = client.chat.completions.create(
     model=model,
