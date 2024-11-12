@@ -21,11 +21,6 @@ To consolidate this week's knowledge, students should complete the following pro
 > Locate your group in the [Discord](https://discord.gg/encodeclub) AI Bootcamp Channel
 >
 > > If you can't find your group, contact the program manager through Discord or email
-## Customizations
-- The Script: You are a professional storyteller who has been hired to write a series of short stories for a new anthology. 
-        The stories should be captivating, imaginative, and thought-provoking. 
-        They should explore a variety of themes and genres, from science fiction and fantasy to mystery and romance. 
-        Each story should be unique and memorable, with compelling characters and unexpected plot twists.
 
 ## Tests
 
@@ -42,12 +37,13 @@ To consolidate this week's knowledge, students should complete the following pro
 
 > **_PROMPT 3:_ Character Summary** Provide the name of each character in the story, followed by their role in the story.
 
-#### No additional customizations 
+- No additional customizations 
 
 - Input: Genre: Sci-Fi | Tone: Sad | Characters: Arthur, Naeem
-
-- Story: The air ringed with silence, crusted with dust and time-warped beyond human eyesight. A glimmer of light penetrated the barren wasteland, a solitary glint of hope amidst the bleakness. Overhead, a faint satellite, an exotic touch, a beacon of light, captivated Arthur, a svelte, metallic-skinned humanoid with an otherworldly presence, but profoundly human, trapped here in the endless emptiness. Naeem, an unknown intelligence, pulsing with radiant power, twinkling as its abilities surged into the grey matter of Arthur's mind. Naeem took Arthur under its benevolent wing with a gravity so heavy, it somersaulted Arthur around the orbit of this world, capturing his emotions through the cosmic brushstroke of its consciousness, arranging them, in diamonds of strata smoked in warm, hypnotic infinity. Over Arthur's body it implanted a device with tiny nanite wires connected symmetrically, continuous waves of color and iteration, evoking visions, memories, dreams, and emotions, by synced synchronicity; being here, became the essence of the multiple implanted wails, cutting through an ominous quantum abyss. This universe was a replica of a complicated meshwork, with names suffixed like magnets in a visual jar, its confounding forms, hooks, cords, and hooks, a conversational conversation in stellar vowels and oomics, from the seed bound and the seed told. Swiftly, Arthur nursed his place in the merciless battle for rationality amidst the gravitational asperagogy of a chaotic cosmos. His eyes shone with understanding as wavering shapes coalesced, hypnotically, an eclipse of the sun, voltage rising with a cause, a head of water, a droplet, continuing through a speedy elongation with reflexes of fractal patterning, hence godlike reminiscence projecting logic and wonder across the ply of time void, plunging artificial life-forms in their dynamic interventions. Although, wounded, this existence was impervious, fortified with proconsul intent as a strategy engine
-
+~~~
+Story: 
+The air ringed with silence, crusted with dust and time-warped beyond human eyesight. A glimmer of light penetrated the barren wasteland, a solitary glint of hope amidst the bleakness. Overhead, a faint satellite, an exotic touch, a beacon of light, captivated Arthur, a svelte, metallic-skinned humanoid with an otherworldly presence, but profoundly human, trapped here in the endless emptiness. Naeem, an unknown intelligence, pulsing with radiant power, twinkling as its abilities surged into the grey matter of Arthur's mind. Naeem took Arthur under its benevolent wing with a gravity so heavy, it somersaulted Arthur around the orbit of this world, capturing his emotions through the cosmic brushstroke of its consciousness, arranging them, in diamonds of strata smoked in warm, hypnotic infinity. Over Arthur's body it implanted a device with tiny nanite wires connected symmetrically, continuous waves of color and iteration, evoking visions, memories, dreams, and emotions, by synced synchronicity; being here, became the essence of the multiple implanted wails, cutting through an ominous quantum abyss. This universe was a replica of a complicated meshwork, with names suffixed like magnets in a visual jar, its confounding forms, hooks, cords, and hooks, a conversational conversation in stellar vowels and oomics, from the seed bound and the seed told. Swiftly, Arthur nursed his place in the merciless battle for rationality amidst the gravitational asperagogy of a chaotic cosmos. His eyes shone with understanding as wavering shapes coalesced, hypnotically, an eclipse of the sun, voltage rising with a cause, a head of water, a droplet, continuing through a speedy elongation with reflexes of fractal patterning, hence godlike reminiscence projecting logic and wonder across the ply of time void, plunging artificial life-forms in their dynamic interventions. Although, wounded, this existence was impervious, fortified with proconsul intent as a strategy engine
+~~~
 
 - Character Summary: 
 ~~~
@@ -64,13 +60,11 @@ Name: Naee
 Role: A video-voyal capable of articulating exclusive rhythms, impressive memory clumps, flashes of creativity, and intentional memories, that makes her a formidable octopus who is capable of inspiring and igniting the other machines involved in formulating a new approach for cultural integration.
 ~~~
 
-> **_OBSERVATION 1:_** A predefined character and custom character was useed to test the model. The model remembers the character names correctly when generating the story. However, the model does not remember the character names effectively when generating the character summary (Typo in the character names).
+> **_OBSERVATION 1:_** The model remembers the character names correctly when generating the story. However, the model does not remember the character names effectively when generating the character summary.
 
 > **_OBSERVATION 2:_** There were not enough characters to generate a complete story. 
 
 > **_OBSERVATION 3:_** The Character Summary section issued multiple summaries for the same character.
-
-
 
 ## Next Steps
 
