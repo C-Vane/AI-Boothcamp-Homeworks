@@ -18,10 +18,10 @@ export default function Chat() {
     { emoji: "😂", value: "Funny" },
   ];
   const predefinedCharacters = [
-    { emoji: "🗡️", name: "Arthur", description: "A brave knight", personality: "Courageous" },
-    { emoji: "🔮", name: "Luna", description: "A wise wizard", personality: "Intelligent" },
-    { emoji: "🗝️", name: "Milo", description: "A cunning thief", personality: "Sneaky" },
-    { emoji: "🌿", name: "Elara", description: "A kind healer", personality: "Compassionate" },
+    { name: "Arthur", description: "A brave knight", personality: "Courageous" },
+    { name: "Luna", description: "A wise wizard", personality: "Intelligent" },
+    { name: "Milo", description: "A cunning thief", personality: "Sneaky" },
+    { name: "Elara", description: "A kind healer", personality: "Compassionate" },
   ];
 
   const [state, setState] = useState({
@@ -99,7 +99,7 @@ export default function Chat() {
     setLastRequestType("characterSummary");
     append({
       role: "user",
-      content: `Generate a summary of the ${state.characters.join(", ")} and their role in the story.`,
+      content: `Provide the name of each character in the story, followed by their role in the story`,
     });
   };
 
@@ -192,7 +192,11 @@ export default function Chat() {
                 </div>
                 <div className="flex-1 bg-opacity-25 bg-gray-700 rounded-lg p-4">
                   <h3 className="text-xl font-semibold">Character Summary</h3>
-                  <div>{characterSummaryContent}</div>
+                  <div>
+                    {characterSummaryContent.split('\n').map((line, index) => (
+                      <p key={index}>{line}</p>
+                    ))}
+                  </div>
                 </div>
               </div>
               <div className="space-y-4 bg-opacity-25 bg-gray-700 rounded-lg p-4">
@@ -206,7 +210,7 @@ export default function Chat() {
                   </button>
                 </div>
                 <div className="flex flex-wrap justify-center">
-                  {characters.map(({ emoji, name, description, personality }) => (
+                  {characters.map(({ name, description, personality }) => (
                     <div
                       key={name}
                       className="p-4 m-2 bg-opacity-25 bg-gray-600 rounded-lg flex items-center"
@@ -220,7 +224,7 @@ export default function Chat() {
                         onChange={() => handleCharacterChange(name)}
                       />
                       <label className="ml-2" htmlFor={name}>
-                        {`${emoji} ${name} - ${description} (${personality})`}
+                        {`${name} - ${description} (${personality})`}
                       </label>
                       <button
                         onClick={() => deleteCharacter(name)}
