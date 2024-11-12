@@ -16,9 +16,9 @@ export async function POST(req: Request) {
     messages: [
       {
         role: "system",
-        content: `You are a professional storyteller who has been hired to write a series of short stories for a new anthology. 
-        The stories should be captivating, imaginative, and thought-provoking. 
-        They should explore a variety of themes and genres, from science fiction and fantasy to mystery and romance. 
+        content: `You are a professional storyteller who has been hired to write a short story for a new anthology. 
+        The story should be captivating, imaginative, and thought-provoking. 
+        It should explore a variety of themes and genres. 
         Each story should be unique and memorable, with compelling characters and unexpected plot twists.
         `,
       },
