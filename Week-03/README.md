@@ -68,11 +68,12 @@ Name: Naee
 Role: A video-voyal capable of articulating exclusive rhythms, impressive memory clumps, flashes of creativity, and intentional memories, that makes her a formidable octopus who is capable of inspiring and igniting the other machines involved in formulating a new approach for cultural integration.
 ~~~
 
-> **_OBSERVATION 1:_** The model remembers the character names correctly when generating the story. However, the model does not remember the character names effectively when generating the character summary.
-
-> **_OBSERVATION 2:_** There were not enough characters to generate a complete story. 
-
-> **_OBSERVATION 3:_** The Character Summary section issued multiple summaries for the same character.
+> **_OBSERVATION 1:_** Character name consistency
+- The model remembers the character names correctly when generating the story. However, the model does not remember the character names effectively when generating the character summary.
+> **_OBSERVATION 2:_** Story quality
+- There were not enough tokens to generate a complete story. 
+> **_OBSERVATION 3:_** Incoherent structure in character summary. 
+- The Character Summary section issued multiple summaries for the same character.
 
 ## Next Steps
 
