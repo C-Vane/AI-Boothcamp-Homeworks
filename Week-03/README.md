@@ -66,7 +66,7 @@ Role: A video-voyal capable of articulating exclusive rhythms, impressive memory
 
 > **_OBSERVATION 1:_** A predefined character and custom character was useed to test the model. The model remembers the character names correctly when generating the story. However, the model does not remember the character names effectively when generating the character summary (Typo in the character names).
 
-> **_OBSERVATION 2:_** There were not enough characters to generate a complete and coherent story. 
+> **_OBSERVATION 2:_** There were not enough characters to generate a complete story. 
 
 > **_OBSERVATION 3:_** The Character Summary section issued multiple summaries for the same character.
 
