@@ -36,9 +36,9 @@ To consolidate this week's knowledge, students should complete the following pro
 3. Temperature: 0.7
 4. Max Tokens: 290
 
-> **_PROMPT 1:_** You are a professional storyteller who has been hired to write a short story for a new anthology. The story should be captivating, imaginative, and thought-provoking. It should explore a variety of themes and genres. Each story should be unique and memorable, with compelling characters and unexpected plot twists.
+> **_PROMPT 1:_ Initial Prompt** You are a professional storyteller who has been hired to write a short story for a new anthology. The story should be captivating, imaginative, and thought-provoking. It should explore a variety of themes and genres. Each story should be unique and memorable, with compelling characters and unexpected plot twists.
 
-> **_PROMPT 2:_ Story** Generate a ${state.genre} story in a ${state.tone} tone starring ${state.characters.join(", ")}. Keep story under 100 words. (Variables: Genre, Tone, Characters)
+> **_PROMPT 2:_ Story Generation** Generate a ${state.genre} story in a ${state.tone} tone starring ${state.characters.join(", ")}. Keep story under 100 words. (Variables: Genre, Tone, Characters)
 
 > **_PROMPT 3:_ Character Summary** Provide the name of each character in the story, followed by their role in the story.
 
