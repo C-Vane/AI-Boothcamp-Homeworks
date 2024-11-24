@@ -2,7 +2,7 @@
 
 A dynamic Next.js application that combines character extraction from text with creative story generation. This app allows users to extract characters from existing stories and use them to generate new stories with different genres and tones.
 
-🔗 [Try it live on Vercel](ADD_YOUR_VERCEL_LINK_HERE)
+🔗 [Try it live on Vercel](https://ai-boothcamp-homeworks.vercel.app/)
 
 ## Features
 
