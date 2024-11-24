@@ -21,56 +21,5 @@
       "personality": "Compassionate"
     }
   ],
-  "extractedCharacters": [
-    {
-      "name": "Amelia",
-      "description": "A brilliant software engineer with a passion for AI, working at a local tech startup.",
-      "personality": "Inventive, intelligent, problem-solver"
-    },
-    {
-      "name": "Raj",
-      "description": "A charismatic chef who owns a popular fusion restaurant downtown.",
-      "personality": "Charismatic, resourceful, cooperative"
-    },
-    {
-      "name": "Sofia",
-      "description": "A retired marine biologist turned urban gardener, with a rooftop greenhouse.",
-      "personality": "Environmentally conscious, helpful, resourceful"
-    },
-    {
-      "name": "Liam",
-      "description": "A struggling musician with dreams of stardom, living in the apartment below Sofia's.",
-      "personality": "Ambitious, creative, opportunistic"
-    },
-    {
-      "name": "Zoe",
-      "description": "An ambitious environmental lawyer fighting to protect the city's coastline, Liam's roommate.",
-      "personality": "Ambitious, argumentative, cooperative"
-    },
-    {
-      "name": "Mrs. Chen",
-      "description": "An elderly widow who practices tai chi and gossips with her cat, Whiskers.",
-      "personality": "Observant, sociable, helpful"
-    },
-    {
-      "name": "Dr. Elias",
-      "description": "A veterinarian who runs a small clinic on the ground floor of the building.",
-      "personality": "Caring, responsible, overwhelmed"
-    },
-    {
-      "name": "Mia",
-      "description": "A bubbly college student studying animal behavior, assistant to Dr. Elias.",
-      "personality": "Bubbly, helpful, overwhelmed"
-    },
-    {
-      "name": "Jack",
-      "description": "An eccentric dog walker known for his colorful bowties and the pack of mismatched dogs that follow him.",
-      "personality": "Eccentric, whimsical, comforting"
-    },
-    {
-      "name": "Detective Olivia Harper",
-      "description": "A no-nonsense police officer with a secret passion for painting, recently moved into the penthouse suite.",
-      "personality": "Authoritative, organized, secretively artistic"
-    }
-  ]
+  "extractedCharacters": []
 }
