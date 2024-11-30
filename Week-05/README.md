@@ -24,15 +24,15 @@ To consolidate this week's learning, complete the following project:
   #### How to run it
 
          ```bash
-         cd /Users/vanessacattabiani/Documents/Projects/AI-boothcamp/AI-Boothcamp-Homeworks/Week-05/animal-danger-detection/backend/clip-as-service-0.8.3/server
+         cd /Users/vanessacattabiani/Documents/Projects/AI-boothcamp/AI-Boothcamp-Homeworks/Week-05/animal-danger-detection/backend/
          ```
 
          ```bash
-         pip install -e .
+         pip install -r requirements.txt
          ```
 
          ```bash
-         python -m clip_server
+         python app.py
          ```
 
 ## Frontend
@@ -44,8 +44,8 @@ To consolidate this week's learning, complete the following project:
       ```bash
       cd /Users/vanessacattabiani/Documents/Projects/AI-boothcamp/AI-Boothcamp-Homeworks/Week-05/animal-danger-detection
 
-      npm install
-      npm run dev
+      pnpm install
+      pnpm run dev
       ```
 
 ## Features
