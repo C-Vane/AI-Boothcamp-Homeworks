@@ -4,7 +4,7 @@ import { OpenAI } from "openai";
 
 // Initialize OpenAI client
 const openai = new OpenAI({
-  apiKey: "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"
+  apiKey: process.env.OPENAI_API_KEY,
 });
 
 type Input = {
