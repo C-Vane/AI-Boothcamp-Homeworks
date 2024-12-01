@@ -49,19 +49,20 @@ export default async function handler(
     const wikipediaInfo = await fetchWikipediaInfo(animal);
 
     // Create a prompt for the LLM to analyze the danger level
-    const prompt = `Based on the following information about a ${animal}, determine if it's dangerous to humans. Consider factors like size, behavior, habitat, and historical interactions with humans.
+    const prompt = `Based on the following information about an ${animal}, determine if it is dangerous to humans. Consider factors like size, behavior, habitat, and historical interactions with humans.
 
-Information about the ${animal}:
-${wikipediaInfo}
+      Information about the ${animal}: ${wikipediaInfo}
 
-Model confidence in identification of the animal: ${(score * 100).toFixed(2)}%
+      Model confidence in identification of the animal: ${(score * 100).toFixed(2)}%
 
-Please provide:
-- A clear yes/no assessment of whether the animal is dangerous
-- A brief explanation of why
-- Any safety precautions if applicable
+      In your response, please provide:
+      - The name of the animal, and dangerous or not dangerous with confidence score.
 
-Format your response in a conversational, informative way.`;
+      - A clear assessment of of the danger that the animal poses to humans.
+      - A brief explanation of why the animal is dangerous or not dangerous.
+      - Provide any safety precautions if applicable.
+
+      Format your response in a conversational, informative way.`;
 
     // Get analysis from OpenAI
     const completion = await openai.chat.completions.create({
