@@ -1,6 +1,11 @@
+"use client";
+import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { useSession, signOut } from "next-auth/react";
 
 export default function Home() {
+  const { data: session } = useSession();
+
   return (
     <div className='relative w-full h-screen'>
       {/* Content */}
@@ -17,16 +22,27 @@ export default function Home() {
           </p>
 
           <div className='flex gap-4 justify-center'>
-            <Link
-              href='/auth/signin'
-              className='px-8 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200 font-semibold'>
-              Sign In
-            </Link>
-            <Link
-              href='/auth/signup'
-              className='px-8 py-3 bg-white text-blue-600 rounded-lg hover:bg-gray-100 transition-colors duration-200 font-semibold border-2 border-blue-600'>
-              Sign Up
-            </Link>
+            {session ? (
+              <>
+                <Link href='/dashboard'>
+                  <Button>Dashboard</Button>
+                </Link>
+                <Button
+                  variant={"outline"}
+                  onClick={() => signOut({ callbackUrl: "/" })}>
+                  Log Out
+                </Button>
+              </>
+            ) : (
+              <>
+                <Link href='/auth/signin'>
+                  <Button>Sign In</Button>
+                </Link>
+                <Link href='/auth/signup'>
+                  <Button variant={"outline"}>Sign Up</Button>
+                </Link>
+              </>
+            )}
           </div>
         </div>
       </div>

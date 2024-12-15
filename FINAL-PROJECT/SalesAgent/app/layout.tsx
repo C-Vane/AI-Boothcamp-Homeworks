@@ -47,7 +47,7 @@ export default function RootLayout({
                 </Link>
               </div>
             </nav>
-            <div className='z-10'>{children}</div>
+            {children}
           </div>
         </Providers>
       </body>

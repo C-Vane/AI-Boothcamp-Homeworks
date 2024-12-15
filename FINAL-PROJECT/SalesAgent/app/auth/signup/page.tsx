@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
 
 export default function SignUp() {
   const router = useRouter();
@@ -43,10 +44,10 @@ export default function SignUp() {
   };
 
   return (
-    <div className='min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8'>
+    <div className='flex items-center justify-center bg-white/10 backdrop-blur-lg py-12 px-4 sm:px-6 lg:px-8'>
       <div className='max-w-md w-full space-y-8'>
         <div>
-          <h2 className='mt-6 text-center text-3xl font-extrabold text-gray-900'>
+          <h2 className='text-center text-3xl font-extrabold text-gray-900'>
             Create your account
           </h2>
         </div>
@@ -99,13 +100,10 @@ export default function SignUp() {
             <div className='text-red-500 text-sm text-center'>{error}</div>
           )}
 
-          <div>
-            <button
-              type='submit'
-              disabled={isLoading}
-              className='group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'>
+          <div className='flex justify-center'>
+            <Button type='submit' disabled={isLoading}>
               {isLoading ? "Creating account..." : "Sign up"}
-            </button>
+            </Button>
           </div>
         </form>
       </div>
