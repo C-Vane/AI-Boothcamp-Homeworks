@@ -2,11 +2,11 @@
 
 ## Project Overview
 
-An AI-powered voice call assistant that simulates sales calls using 11LABS for voice synthesis, LlamaIndex for document understanding, and OpenAI for conversation intelligence. The system includes an admin panel for managing targets and playbooks, and a mobile interface for simulated calls.
+An AI-powered voice call assistant that simulates sales calls using 11LABS for voice synthesis, LlamaIndex for document understanding, and OpenAI for conversation intelligence. The system includes an user panel for managing targets and playbooks, and a mobile interface for simulated calls.
 
 ## Core Features
 
-### Admin Panel
+### User Panel
 
 - Upload and manage target information
 - Create and manage sales playbooks with document embedding
@@ -14,7 +14,7 @@ An AI-powered voice call assistant that simulates sales calls using 11LABS for v
 - Track TODO items generated from calls
 - Company information management
 
-### Target Interface
+### Target Interface Simulation
 
 - Mobile-first call simulation
 - Animated phone ring interface
@@ -26,40 +26,78 @@ An AI-powered voice call assistant that simulates sales calls using 11LABS for v
 
 - Voice-to-Text conversion (11LABS)
 - Text-to-Voice synthesis (11LABS)
-- Document embedding and retrieval (LlamaIndex)
 - Conversation Intelligence (OpenAI)
-- Call transcript storage
-- Automated call summary generation
-- TODO list generation for admin
 
-## Implementation Plan (1-Week Timeline)
+## Technical Stack
 
-### Foundation & Document Processing
+### Frontend
 
-#### Project Setup
+- Next.js 14
+- TypeScript
+- TailwindCSS
+- Framer Motion (animations)
 
-- [ ] Initialize Next.js 14 project with TypeScript
-- [ ] Set up MongoDB with Mongoose
-- [ ] Configure 11LABS API integration
+### Backend
 
-#### Admin Panel & Document Management
+- Next.js API Routes
+- MongoDB with Mongoose
+- 11LABS API
 
-- [ ] Create admin dashboard layout
-- [ ] Create playbook management interface
-  - [ ] Implement document upload system for playbooks to eleven labs
-- [ ] Implement company information storage
-- [ ] Create target management interface
-- [ ] Create Sales agent creation interface
-- [ ] Create conversation history interface
+### Development Tools
 
-### Voice Call Simulation
+- ESLint
+- Prettier
+- Jest
+- React Testing Library
 
-#### Call Interface
+#### Next Steps:
 
-- [ ] Build mobile call interface
-- [ ] Implement ring animation
-- [ ] Create call timer component
-- [ ] Add call end animation
+- Automated call summaries
+- TODO list generation
+- Authentication and authorization
+- Call scheduling and worker
+
+## Project Structure
+
+User has Projects
+Projects have Agents
+Projects have Targets
+Agents are assigned to Targets
+Agents have documents (Playbooks and Product Details, urls to a website)
+Targets have calls
+
+```
+/
+├── app/
+│   ├── api/
+│   │   ├── voice/
+│   │   ├── call/
+│   │   ├── auth/
+│   │   │   ├── signup/
+│   │   │   └── [..nextauth]/
+│   │   │
+│   │   └── projects/
+│   │       └── [id]
+│   ├── auth/
+│   │   ├── signin/
+│   │   └── signup/
+│   ├── pages/
+│   ├── dashboard/
+│   │   └── projects/
+│   │       └── [id]/
+│   └── simulation/
+├── components/
+│   ├── user/
+│   ├── call/
+│   └── ui/
+├── lib/
+│   ├── elevenlabs/
+│   ├── openai/
+│   └── db/
+├── models/
+└── public/
+    └── assets/
+```
 
 ### Database
 
@@ -85,6 +123,7 @@ An AI-powered voice call assistant that simulates sales calls using 11LABS for v
   updatedAt: Date,
   contactInCommon: String,
   projectId: ObjectId
+  agentId: ObjectId
 }
 
 // Call Schema
@@ -117,7 +156,7 @@ An AI-powered voice call assistant that simulates sales calls using 11LABS for v
   logo: String,
   createdAt: Date,
   updatedAt: Date,
-  adminId: ObjectId
+  userId: ObjectId
 }
 
 //Agent Schema
@@ -126,7 +165,7 @@ An AI-powered voice call assistant that simulates sales calls using 11LABS for v
   projectId: String,
 }
 
-//Admin Schema
+//User Schema
 {
   name: String,
   email: String,
@@ -136,9 +175,43 @@ An AI-powered voice call assistant that simulates sales calls using 11LABS for v
 }
 ```
 
+## Implementation Plan (1-Week Timeline)
+
+### Foundation & Document Processing
+
+#### Project Setup
+
+- [x] Initialize Next.js project with TypeScript
+- [x] Set up MongoDB with Mongoose
+  - [x] Create Sign In and Sign Up pages and authentication system
+
+#### User Panel & Document Management
+
+- [x] Create user dashboard layout
+  - [x] Create project management interface
+- [ ] Create playbook management interface
+  - [ ] Implement document upload system for playbooks to eleven labs
+- [ ] Implement company information storage
+- [ ] Create target management interface
+- [ ] Create Sales agent creation interface
+- [ ] Create conversation history interface
+- [ ] Configure 11LABS API integration
+  - [ ] Implement the agent creation api call to 11labs (https://api.elevenlabs.io/v1/convai/agents)
+  - [ ] Implement the document upload api call to 11labs (https://api.elevenlabs.io/v1/convai/agents/{agent_id}/add-to-knowledge-base)
+  - [ ]
+
+### Voice Call Simulation
+
+#### Call Interface
+
+- [ ] Build mobile call interface
+- [ ] Implement ring animation
+- [ ] Create call timer component
+- [ ] Add call end animation
+
 #### Conversation History
 
-- [ ] Implement Admin access to conversation history
+- [ ] Implement User access to conversation history
 - [ ] Implement call transcript summery
 
 ### Polish & Deployment
@@ -152,72 +225,6 @@ An AI-powered voice call assistant that simulates sales calls using 11LABS for v
 
 - [ ] Deploy to Vercel
 - [ ] Set up MongoDB Atlas
-
-## Project Structure
-
-```
-/
-├── app/
-│   ├── api/
-│   │   ├── voice/
-│   │   ├── call/
-│   │   └── admin/
-│   ├── admin/
-│   │   ├── targets/
-│   │   ├── playbooks/
-│   │   └── calls/
-│   └── call/
-├── components/
-│   ├── admin/
-│   ├── call/
-│   └── ui/
-├── lib/
-│   ├── elevenlabs/
-│   ├── openai/
-│   ├── llamaindex/
-│   └── db/
-├── models/
-└── public/
-    └── assets/
-```
-
-## Technical Stack
-
-### Frontend
-
-- Next.js 14
-- TypeScript
-- TailwindCSS
-- Framer Motion (animations)
-
-### Backend
-
-- Next.js API Routes
-- MongoDB with Mongoose
-- 11LABS API
-
-### Development Tools
-
-- ESLint
-- Prettier
-- Jest
-- React Testing Library
-
-## Key Features
-
-- Document embedding and retrieval
-- Real-time voice processing
-- Intelligent conversation handling
-- Call transcript storage
-- Admin dashboard
-- Mobile call interface
-
-Next Steps:
-
-- Automated call summaries
-- TODO list generation
-- Authentication and authorization
-- Call scheduling and worker
 
 ## Getting Started
 
@@ -233,7 +240,7 @@ pnpm install
 
 ```env
 MONGODB_URI=your_mongodb_uri
-ELEVENLABS_API_KEY=your_elevenlabs_key
+XI_API_KEY=your_elevenlabs_key
 OPENAI_API_KEY=your_openai_key
 ```
 
@@ -245,17 +252,25 @@ npm run dev
 pnpm dev
 ```
 
+3. Seed Database
+
+```bash
+npm run seed
+# or
+pnpm seed
+```
+
 ## User Flow
 
-1. Admin uploads playbook and company information
+1. User uploads playbook and company information
 2. System processes documents
-3. Admin adds target details
+3. User adds target details
 4. Target receives simulated call
 5. Voice conversation is processed through:
    - Voice-to-Text (11LABS)
    - Response generation (OpenAI)
    - Text-to-Voice (11LABS)
-6. Admin can view transcripts and follow-up items
+6. User can view transcripts and follow-up items
 7. System generates call summary and TODOs
 
 ## Deployment
