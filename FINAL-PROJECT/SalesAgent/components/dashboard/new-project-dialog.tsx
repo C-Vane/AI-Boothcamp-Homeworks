@@ -45,7 +45,6 @@ export function NewProjectDialog() {
       logoUrl: formData.get("logoUrl"),
     };
 
-    console.log(data);
     try {
       const response = await fetch("/api/projects", {
         method: "POST",
@@ -65,13 +64,12 @@ export function NewProjectDialog() {
       });
       setOpen(false);
       // You might want to refresh the projects list here
-    } catch (error) {
+    } catch {
       toast({
         title: "Error",
         description: "Failed to create project",
         variant: "destructive",
       });
-      console.log(error);
     }
   }
 

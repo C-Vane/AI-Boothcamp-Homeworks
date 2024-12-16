@@ -16,7 +16,7 @@ export default function RootLayout({
     <html lang='en' className={"h-full w-full"}>
       <body className='antialiased w-full h-full lex flex-col relative'>
         <Providers>
-          <div className='flex flex-col flex-grow w-full items-center justify-center sm:px-4 pt-16'>
+          <div className='flex flex-col flex-grow w-full items-center justify-center sm:px-4'>
             <div className='absolute inset-0 z-0 w-full'>
               <Image
                 src='/image.png'
@@ -47,7 +47,9 @@ export default function RootLayout({
                 </Link>
               </div>
             </nav>
-            {children}
+            <div className='z-10 min-h-screen w-full flex pt-16'>
+              {children}
+            </div>
           </div>
         </Providers>
       </body>

@@ -23,11 +23,11 @@ export interface ITarget {
 const TargetSchema = new Schema<ITarget>(
   {
     name: { type: String, required: true },
-    company: { type: String, required: true },
+    company: { type: String },
     position: { type: String },
     industry: { type: String },
     phone: { type: String, required: true },
-    email: { type: String, required: true },
+    email: { type: String },
     status: {
       type: String,
       enum: ["pending", "contacted", "scheduled", "completed", "failed"],
@@ -39,7 +39,7 @@ const TargetSchema = new Schema<ITarget>(
     notes: { type: String },
     contactInCommon: { type: String },
     projectId: { type: Schema.Types.ObjectId, ref: "Project", required: true },
-    agentId: { type: Schema.Types.ObjectId, ref: "Agent", required: true },
+    agentId: { type: Schema.Types.ObjectId, ref: "Agent" },
     createdAt: { type: Date, default: Date.now },
     updatedAt: { type: Date, default: Date.now },
   },

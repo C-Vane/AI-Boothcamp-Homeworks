@@ -4,14 +4,15 @@ import { useEffect, useState } from "react";
 import { IProject } from "@/models/Project";
 import { IAgent } from "@/models/Agent";
 import { ITarget } from "@/models/Target";
+import { GetAgentResponseModel } from "elevenlabs/api";
 
-interface ProjectWithRelations extends IProject {
-  agents?: IAgent[];
+export interface ProjectWithRelations extends IProject {
+  agents?: IAgent & GetAgentResponseModel[];
   targets?: ITarget[];
 }
 
 export const useProject = (projectId: string) => {
-  const [project, setProject] = useState<ProjectWithRelations[]>([]);
+  const [project, setProject] = useState<ProjectWithRelations>();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -34,7 +35,7 @@ export const useProject = (projectId: string) => {
     };
 
     fetchProjects();
-  }, []);
+  }, [projectId]);
 
   return {
     project,

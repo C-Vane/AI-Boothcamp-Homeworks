@@ -1,33 +1,38 @@
 "use client";
 
-import { IProject } from "@/models/Project";
 import { Button } from "@/components/ui/button";
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Dialog, DialogTrigger } from "@/components/ui/dialog";
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+
 import { NewAgentDialog } from "./new-agent-dialog";
-import { FileUploadDialog } from "./file-upload-dialog";
+
 import { useState } from "react";
-import { deleteAgent, deleteDocument, getDocuments } from "@/lib/11labs";
 import { useToast } from "@/hooks/use-toast";
+import { ProjectWithRelations } from "@/hooks/use-project";
+import { client } from "@/lib/11labs";
+import { Pencil, Play, Trash2 } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { useRouter } from "next/navigation";
 
-interface ProjectAgentsProps {
-  project: IProject;
-}
-
-export function ProjectAgents({ project }: ProjectAgentsProps) {
+export function ProjectAgents({ project }: { project: ProjectWithRelations }) {
   const [selectedAgentId, setSelectedAgentId] = useState<string | null>(null);
   const { toast } = useToast();
+  const router = useRouter();
 
   const handleDeleteAgent = async (agentId: string) => {
     try {
-      await deleteAgent(agentId);
+      await client.conversationalAi.deleteAgent(agentId);
       // Update project in database to remove agent
       toast({
         title: "Success",
@@ -46,48 +51,91 @@ export function ProjectAgents({ project }: ProjectAgentsProps) {
     <div className='space-y-4'>
       <div className='flex justify-between'>
         <h3 className='text-lg font-medium'>AI Sales Agents</h3>
-        <Dialog>
-          <DialogTrigger asChild>
-            <Button>Create Agent</Button>
-          </DialogTrigger>
-          <NewAgentDialog projectId={project._id.toString()} />
-        </Dialog>
+        <NewAgentDialog projectId={project._id} />
       </div>
 
-      <div className='grid gap-4 md:grid-cols-2 lg:grid-cols-3'>
-        {project.agents?.map((agent) => (
-          <Card key={agent.agentId}>
-            <CardHeader>
-              <CardTitle>{agent.name}</CardTitle>
-              <CardDescription>{agent.description}</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p className='text-sm text-muted-foreground'>
-                Created: {new Date(agent.createdAt).toLocaleDateString()}
-              </p>
-            </CardContent>
-            <CardFooter className='flex justify-between'>
-              <Dialog>
-                <DialogTrigger asChild>
-                  <Button
-                    variant='outline'
-                    onClick={() => setSelectedAgentId(agent.agentId)}>
-                    Add Resources
-                  </Button>
-                </DialogTrigger>
-                <FileUploadDialog
-                  agentId={agent.agentId}
-                  projectId={project._id.toString()}
-                />
-              </Dialog>
-              <Button
-                variant='destructive'
-                onClick={() => handleDeleteAgent(agent.agentId)}>
-                Delete
-              </Button>
-            </CardFooter>
-          </Card>
-        ))}
+      <div className='rounded-md border'>
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Name</TableHead>
+              <TableHead>Language</TableHead>
+              <TableHead>Model</TableHead>
+              <TableHead>Voice</TableHead>
+              <TableHead>Created</TableHead>
+              <TableHead className='text-right'>Actions</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {!project.agents?.length && (
+              <TableRow>
+                <TableCell colSpan={6} className='h-24 text-center'>
+                  No agents found.
+                </TableCell>
+              </TableRow>
+            )}
+            {project.agents?.map((agent) => (
+              <TableRow key={agent.agent_id}>
+                <TableCell className='font-medium'>
+                  <div>
+                    <div>{agent.name}</div>
+                    <div className='text-sm text-muted-foreground'>
+                      {agent.conversation_config.agent?.prompt?.prompt}
+                    </div>
+                  </div>
+                </TableCell>
+                <TableCell>
+                  {agent.conversation_config.agent?.language}
+                </TableCell>
+                <TableCell>
+                  {agent.conversation_config.agent?.prompt?.llm}
+                </TableCell>
+                <TableCell>{agent.conversation_config.tts?.voice_id}</TableCell>
+                <TableCell>
+                  {new Date(
+                    agent.metadata.created_at_unix_secs * 1000
+                  ).toLocaleDateString()}
+                </TableCell>
+                <TableCell className='text-right'>
+                  <div className='flex justify-end gap-2'>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant='ghost' size='icon'>
+                          <Play className='h-4 w-4' />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent
+                        align='end'
+                        className='max-h-36 overflow-scroll'>
+                        {project.targets?.map((target) => (
+                          <DropdownMenuItem
+                            key={target._id}
+                            onClick={() =>
+                              router.push(
+                                `/simulation/${agent.agent_id}/${target._id}`
+                              )
+                            }>
+                            {target.name}
+                          </DropdownMenuItem>
+                        ))}
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                    <Button variant='ghost' size='icon'>
+                      <Pencil className='h-4 w-4' />
+                    </Button>
+                    <Button
+                      variant='ghost'
+                      size='icon'
+                      className='text-destructive'
+                      onClick={() => handleDeleteAgent(agent.agent_id)}>
+                      <Trash2 className='h-4 w-4' />
+                    </Button>
+                  </div>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
       </div>
     </div>
   );

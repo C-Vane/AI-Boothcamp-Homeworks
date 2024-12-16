@@ -32,16 +32,15 @@ export default function SignIn() {
         router.push("/dashboard");
         router.refresh();
       }
-    } catch (error) {
+    } catch {
       setError("An error occurred. Please try again.");
-      console.log(error);
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <div className='flex items-center justify-center bg-white/10 backdrop-blur-lg py-12 px-4 sm:px-6 lg:px-8'>
+    <div className='flex items-center justify-center bg-white/10 backdrop-blur-lg py-12 px-4 sm:px-6 lg:px-8 m-auto'>
       <div className='max-w-md w-full space-y-8'>
         <div>
           <h2 className='text-center text-3xl font-extrabold text-gray-900'>

@@ -3,84 +3,115 @@
 import { Button } from "@/components/ui/button";
 import * as React from "react";
 import { useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Conversation } from "@11labs/client";
 import { cn } from "@/lib/utils";
+import { ITarget } from "@/models";
+import { useToast } from "@/hooks/use-toast";
 
 async function requestMicrophonePermission() {
   try {
     await navigator.mediaDevices.getUserMedia({ audio: true });
     return true;
   } catch {
-    console.error("Microphone permission denied");
     return false;
   }
 }
 
 async function getSignedUrl(agentId: string): Promise<string> {
   const response = await fetch("/api/signed-url/" + agentId);
-  console.log(response);
   if (!response.ok) {
     throw Error("Failed to get signed url");
   }
-  const data = await response.json();
-  return data.signedUrl;
+  const { url } = await response.json();
+  return url;
 }
 
-export function ConvAI({ agentId }: { agentId: string }) {
+export function ConvAI({
+  agentId,
+  target,
+}: {
+  agentId: string;
+  target: ITarget;
+}) {
+  const { toast } = useToast();
   const [conversation, setConversation] = useState<Conversation | null>(null);
   const [isConnected, setIsConnected] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
 
   async function startConversation() {
-    const hasPermission = await requestMicrophonePermission();
-    if (!hasPermission) {
-      alert("No permission");
-      return;
-    }
-    const signedUrl = await getSignedUrl(agentId);
+    try {
+      const hasPermission = await requestMicrophonePermission();
+      if (!hasPermission) {
+        toast({
+          variant: "destructive",
+          title: "Permission Denied",
+          description: "Microphone access is required for the conversation",
+        });
+        return;
+      }
 
-    const conversation = await Conversation.startSession({
-      signedUrl: signedUrl,
-      onConnect: () => {
-        setIsConnected(true);
-        setIsSpeaking(true);
-      },
-      onDisconnect: () => {
-        setIsConnected(false);
-        setIsSpeaking(false);
-      },
-      onError: (error) => {
-        console.log(error);
-        alert("An error occurred during the conversation");
-      },
-      onModeChange: ({ mode }) => {
-        setIsSpeaking(mode === "speaking");
-      },
-    });
-    setConversation(conversation);
+      const signedUrl = await getSignedUrl(agentId);
+
+      const conversation = await Conversation.startSession({
+        signedUrl: signedUrl,
+        onConnect: () => {
+          setIsConnected(true);
+          setIsSpeaking(true);
+        },
+        onDisconnect: () => {
+          setIsConnected(false);
+          setIsSpeaking(false);
+        },
+        onError: (error) => {
+          toast({
+            variant: "destructive",
+            title: "Connection Error",
+            description: error,
+          });
+        },
+        onModeChange: ({ mode }) => {
+          setIsSpeaking(mode === "speaking");
+        },
+      });
+      setConversation(conversation);
+    } catch {
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: "Failed to start conversation. Please try again.",
+      });
+    }
   }
 
   async function endConversation() {
-    if (!conversation) {
-      return;
+    if (conversation) {
+      await conversation.endSession();
+      setConversation(null);
     }
-    await conversation.endSession();
-    setConversation(null);
   }
 
   return (
-    <div className={"flex justify-center items-center gap-x-4"}>
+    <div className={"flex justify-center items-center gap-x-4 m-auto"}>
       <Card className={"rounded-3xl"}>
         <CardContent>
           <CardHeader>
             <CardTitle className={"text-center"}>
               {isConnected
                 ? isSpeaking
-                  ? `Agent is speaking`
+                  ? "Agent is speaking"
                   : "Agent is listening"
                 : "Disconnected"}
             </CardTitle>
+            <CardDescription className={"text-center"}>
+              Target: {target.name}
+            </CardDescription>
           </CardHeader>
           <div className={"flex flex-col gap-y-4 text-center"}>
             <div
@@ -98,6 +129,7 @@ export function ConvAI({ agentId }: { agentId: string }) {
               onClick={startConversation}>
               Start conversation
             </Button>
+
             <Button
               variant={"outline"}
               className={"rounded-full"}

@@ -93,8 +93,6 @@ export async function GET() {
       },
     ]);
 
-    console.log({ projects });
-
     // Get all targets for admin's projects
     const adminProjects = await Project.find({
       adminId: new mongoose.Types.ObjectId(session.user.id),

@@ -4,22 +4,24 @@ import { ProjectHeader } from "@/components/project/project-header";
 import { ProjectTargets } from "@/components/project/project-targets";
 import { ProjectAgents } from "@/components/project/project-agents";
 import { useProject } from "@/hooks/use-project";
+import { Skeleton } from "@/components/ui/skeleton";
+import { useParams } from "next/navigation";
 
-interface ProjectPageProps {
-  params: {
-    id: string;
-  };
-}
-
-export default function ProjectPage({ params }: ProjectPageProps) {
-  const { project, error, loading } = useProject(params.id);
+export default function ProjectPage() {
+  const { id } = useParams<{ id: string }>();
+  const { project, error, loading } = useProject(id);
 
   if (error) {
     return <div>Error: {error}</div>;
   }
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div className='container mx-auto p-4 md:p-8 pt-6 max-w-7xl space-y-4 '>
+        <Skeleton className='h-[100px] w-full rounded-xl' />
+        <Skeleton className='h-[400px] w-full' />
+      </div>
+    );
   }
 
   if (!project) {
@@ -27,10 +29,12 @@ export default function ProjectPage({ params }: ProjectPageProps) {
   }
 
   return (
-    <div className='flex-1 space-y-4 p-4 md:p-8 pt-6'>
+    <div className='flex-1 space-y-4 p-4 md:p-8 pt-6 w-full max-w-7xl mx-auto'>
       <ProjectHeader project={project} />
 
-      <Tabs defaultValue='targets' className='space-y-4'>
+      <Tabs
+        defaultValue='targets'
+        className='space-y-4 bg-white/10 backdrop-blur-lg rounded-lg p-6'>
         <TabsList>
           <TabsTrigger value='targets'>Targets</TabsTrigger>
           <TabsTrigger value='agents'>Agents</TabsTrigger>

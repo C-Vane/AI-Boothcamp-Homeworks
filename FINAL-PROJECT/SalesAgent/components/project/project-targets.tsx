@@ -1,6 +1,5 @@
 "use client";
 
-import { IProject } from "@/models/Project";
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -13,31 +12,27 @@ import {
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { NewTargetDialog } from "./new-target-dialog";
 import { Badge } from "@/components/ui/badge";
-import { ITarget } from "@/models";
-
-interface ProjectTargetsProps {
-  project: IProject & { targets: ITarget[] };
-}
+import { ProjectWithRelations } from "@/hooks/use-project";
+import { Pencil, Trash2 } from "lucide-react";
 
 const statusColors = {
-  pending: "bg-blue-500",
-  contacted: "bg-purple-500",
-  scheduled: "bg-yellow-500",
-  completed: "bg-green-500",
-  failed: "bg-red-500",
+  pending: "border-blue-500 text-blue-500",
+  contacted: "border-purple-500 text-purple-500",
+  scheduled: "border-yellow-500 text-yellow-500",
+  completed: "border-green-500 text-green-500",
+  failed: "border-red-500 text-red-500",
 };
 
-export function ProjectTargets({ project }: ProjectTargetsProps) {
+export function ProjectTargets({ project }: { project: ProjectWithRelations }) {
   return (
     <div className='space-y-4'>
       <div className='flex justify-between'>
         <h3 className='text-lg font-medium'>Targets</h3>
-        <Dialog>
-          <DialogTrigger asChild>
-            <Button>Add Target</Button>
-          </DialogTrigger>
-          <NewTargetDialog projectId={project._id.toString()} />
-        </Dialog>
+
+        <NewTargetDialog
+          projectId={project._id}
+          agents={project.agents || []}
+        />
       </div>
 
       <div className='rounded-md border'>
@@ -53,13 +48,23 @@ export function ProjectTargets({ project }: ProjectTargetsProps) {
             </TableRow>
           </TableHeader>
           <TableBody>
+            {/* If no targets, show a message */}
+            {!project.targets?.length && (
+              <TableRow>
+                <TableCell colSpan={6} className='h-24 text-center'>
+                  No targets found.
+                </TableCell>
+              </TableRow>
+            )}
             {project.targets?.map((target, index) => (
               <TableRow key={index}>
                 <TableCell className='font-medium'>{target.name}</TableCell>
                 <TableCell>{target.company}</TableCell>
                 <TableCell>{target.position}</TableCell>
                 <TableCell>
-                  <Badge className={statusColors[target.status]}>
+                  <Badge
+                    variant={"outline"}
+                    className={statusColors[target.status]}>
                     {target.status}
                   </Badge>
                 </TableCell>
@@ -69,9 +74,17 @@ export function ProjectTargets({ project }: ProjectTargetsProps) {
                   {target.phone}
                 </TableCell>
                 <TableCell className='text-right'>
-                  <Button variant='ghost' size='sm'>
-                    Edit
-                  </Button>
+                  <div className='flex justify-end gap-2'>
+                    <Button variant='ghost' size='icon'>
+                      <Pencil className='h-4 w-4' />
+                    </Button>
+                    <Button
+                      variant='ghost'
+                      size='icon'
+                      className='text-destructive'>
+                      <Trash2 className='h-4 w-4' />
+                    </Button>
+                  </div>
                 </TableCell>
               </TableRow>
             ))}
