@@ -70,31 +70,40 @@ Targets have calls
 /
 ├── app/
 │   ├── api/
-│   │   ├── voice/
-│   │   ├── call/
 │   │   ├── auth/
 │   │   │   ├── signup/
-│   │   │   └── [..nextauth]/
-│   │   │
-│   │   └── projects/
-│   │       └── [id]
+│   │   │   └── [...nextauth]/
+│   │   ├── dashboard/
+│   │   ├── projects/
+│   │   │   └── [id]/
+│   │   │       ├── agents/
+│   │   │       └── targets/
+│   │   ├── signed-url/
+│   │   │   └── [agentId]/
+│   │   └── voices/
 │   ├── auth/
 │   │   ├── signin/
 │   │   └── signup/
-│   ├── pages/
 │   ├── dashboard/
-│   │   └── projects/
-│   │       └── [id]/
+│   ├── projects/
+│   │   └── [id]/
 │   └── simulation/
+│       └── [agentId]/
+│           └── [targetId]/
 ├── components/
-│   ├── user/
-│   ├── call/
-│   └── ui/
+│   ├── dashboard/
+│   ├── project/
+│   ├── ui/
+│   └── ConvAI.tsx
 ├── lib/
-│   ├── elevenlabs/
-│   ├── openai/
-│   └── db/
+│   ├── 11labs.ts
+│   ├── db/
+│   └── utils.ts
 ├── models/
+│   ├── Agent.ts
+│   ├── Project.ts
+│   ├── Target.ts
+│   └── User.ts
 └── public/
     └── assets/
 ```
@@ -189,16 +198,17 @@ Targets have calls
 
 - [x] Create user dashboard layout
   - [x] Create project management interface
-- [ ] Create playbook management interface
-  - [ ] Implement document upload system for playbooks to eleven labs
-- [ ] Implement company information storage
-- [ ] Create target management interface
-- [ ] Create Sales agent creation interface
-- [ ] Create conversation history interface
-- [ ] Configure 11LABS API integration
-  - [ ] Implement the agent creation api call to 11labs (https://api.elevenlabs.io/v1/convai/agents)
-  - [ ] Implement the document upload api call to 11labs (https://api.elevenlabs.io/v1/convai/agents/{agent_id}/add-to-knowledge-base)
-  - [ ]
+- [x] Create playbook management interface
+  - [x] Implement document upload system for playbooks to eleven labs
+- [x] Implement company information storage
+- [x] Create target management interface
+- [x] Create Sales agent creation interface
+- [x] Configure 11LABS API integration
+
+  - [x] Implement the agent creation api call to 11labs (https://api.elevenlabs.io/v1/convai/agents)
+  - [x] Implement the document upload api call to 11labs (https://api.elevenlabs.io/v1/convai/agents/{agent_id}/add-to-knowledge-base)
+
+- [ ] Implement Task and TODO list generation
 
 ### Voice Call Simulation
 
