@@ -29,11 +29,7 @@ export function AudioPlayer({ src, className }: AudioPlayerProps) {
   return (
     <div className={className}>
       <audio ref={audioRef} src={src} onEnded={onEnded} className='hidden' />
-      <Button
-        variant='outline'
-        size='icon'
-        onClick={togglePlayPause}
-        className='h-8 w-8'>
+      <Button size='icon' onClick={togglePlayPause} className='h-8 w-8'>
         {isPlaying ? (
           <Pause className='h-4 w-4' />
         ) : (

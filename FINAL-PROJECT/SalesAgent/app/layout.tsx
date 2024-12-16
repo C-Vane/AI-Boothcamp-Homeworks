@@ -1,9 +1,12 @@
 import type { Metadata } from "next";
+import { Inter } from "next/font/google";
 import "./globals.css";
 import Link from "next/link";
 import { SalesAgentLogo, GithubLogo } from "@/components/logos";
 import { Providers } from "./providers";
 import Image from "next/image";
+
+const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "ConvAI",
@@ -13,8 +16,9 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang='en' className={"h-full w-full "}>
-      <body className='antialiased w-full h-full lex flex-col relative bg-gray-900'>
+    <html lang='en' suppressHydrationWarning className={"h-full w-full "}>
+      <body
+        className={`${inter.className} antialiased w-full h-full lex flex-col relative bg-gray-900`}>
         <Providers>
           <div className='flex flex-col flex-grow w-full items-center justify-center sm:px-4'>
             <div className='fixed inset-0 z-0 w-full'>
@@ -32,7 +36,7 @@ export default function RootLayout({
               }>
               <div className={"flex"}>
                 <Link href={"/"} prefetch={true}>
-                  <SalesAgentLogo className='h-[35px] w-auto text-gray-600 hover:text-gray-500' />
+                  <SalesAgentLogo className='h-[35px] w-auto text-slate-200 hover:text-slate-300' />
                 </Link>
               </div>
 

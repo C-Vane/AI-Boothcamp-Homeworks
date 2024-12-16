@@ -8,7 +8,7 @@ export function ProjectHeader({ project }: { project: ProjectWithRelations }) {
   const router = useRouter();
 
   return (
-    <div className='flex items-center justify-between bg-white/10 backdrop-blur-lg rounded-lg p-6'>
+    <div className='flex items-center justify-between bg-slate/10 backdrop-blur-lg rounded-lg p-6'>
       <div className='space-y-1'>
         <h2 className='text-2xl font-semibold tracking-tight'>
           {project.name}
@@ -18,7 +18,7 @@ export function ProjectHeader({ project }: { project: ProjectWithRelations }) {
         </p>
       </div>
       <div className='flex items-center space-x-2'>
-        <Button variant='outline' onClick={() => router.push("/dashboard")}>
+        <Button onClick={() => router.push("/dashboard")}>
           Back to Dashboard
         </Button>
       </div>

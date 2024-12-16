@@ -122,7 +122,6 @@ export function ConvAI({
               )}></div>
 
             <Button
-              variant={"outline"}
               className={"rounded-full"}
               size={"lg"}
               disabled={conversation !== null && isConnected}
@@ -131,7 +130,6 @@ export function ConvAI({
             </Button>
 
             <Button
-              variant={"outline"}
               className={"rounded-full"}
               size={"lg"}
               disabled={conversation === null && !isConnected}

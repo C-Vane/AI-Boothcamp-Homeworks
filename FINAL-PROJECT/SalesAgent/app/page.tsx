@@ -27,9 +27,7 @@ export default function Home() {
                 <Link href='/dashboard'>
                   <Button>Dashboard</Button>
                 </Link>
-                <Button
-                  variant={"outline"}
-                  onClick={() => signOut({ callbackUrl: "/" })}>
+                <Button onClick={() => signOut({ callbackUrl: "/" })}>
                   Log Out
                 </Button>
               </>
@@ -39,7 +37,7 @@ export default function Home() {
                   <Button>Sign In</Button>
                 </Link>
                 <Link href='/auth/signup'>
-                  <Button variant={"outline"}>Sign Up</Button>
+                  <Button>Sign Up</Button>
                 </Link>
               </>
             )}

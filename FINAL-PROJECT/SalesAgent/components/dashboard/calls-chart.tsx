@@ -34,17 +34,13 @@ interface CallsChartProps {
 
 const options = {
   responsive: true,
+  maintainAspectRatio: false,
   plugins: {
     legend: {
       position: "top" as const,
       labels: {
         color: "rgb(229, 231, 235)", // text-gray-200
       },
-    },
-    title: {
-      display: true,
-      text: "Calls Overview",
-      color: "rgb(229, 231, 235)", // text-gray-200
     },
   },
   scales: {
@@ -87,8 +83,11 @@ export function CallsChart({ data }: CallsChartProps) {
   };
 
   return (
-    <div>
-      <Line options={options} data={chartData} />
-    </div>
+    <>
+      <h3 className='text-lg font-semibold text-gray-100'>Calls Overview</h3>
+      <div className='h-[10rem] md:h-[20rem]'>
+        <Line options={options} data={chartData} />
+      </div>
+    </>
   );
 }

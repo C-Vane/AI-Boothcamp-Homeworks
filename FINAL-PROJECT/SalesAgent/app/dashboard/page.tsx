@@ -49,18 +49,18 @@ export default function DashboardPage() {
 
       <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
         {/* Charts */}
-        <div className='bg-white/10 backdrop-blur-lg rounded-lg p-6'>
+        <div className='bg-slate/10 backdrop-blur-lg rounded-lg p-6 w-full h-full'>
           <CallsChart data={data?.callsData} />
         </div>
 
         {/* Targets Progress */}
-        <div className='bg-white/10 backdrop-blur-lg rounded-lg p-6'>
+        <div className='bg-slate/10 backdrop-blur-lg rounded-lg p-6'>
           <TargetsProgress progress={data?.industryProgress} />
         </div>
       </div>
 
       {/* Projects Grid */}
-      <div className='bg-white/10 backdrop-blur-lg rounded-lg p-6'>
+      <div className='bg-slate/10 backdrop-blur-lg rounded-lg p-6'>
         <ProjectsGrid projects={data?.projects || []} />
       </div>
     </div>

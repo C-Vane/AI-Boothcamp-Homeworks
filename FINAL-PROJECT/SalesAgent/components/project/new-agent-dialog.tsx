@@ -136,7 +136,7 @@ export function NewAgentDialog({ projectId }: NewAgentDialogProps) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant='outline'>Create New Agent</Button>
+        <Button>Create New Agent</Button>
       </DialogTrigger>
       <DialogContent className='sm:max-w-[625px]'>
         <DialogHeader>

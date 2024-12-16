@@ -24,7 +24,7 @@ export function ProjectsGrid({ projects }: ProjectsGridProps) {
             key={project.id}
             href={`/projects/${project.id}`}
             className='block group'>
-            <div className='bg-white/5 backdrop-blur-lg rounded-lg p-6 space-y-4 hover:bg-white/10 transition-colors duration-200'>
+            <div className='bg-white/5 backdrop-blur-lg rounded-lg p-6 space-y-4 hover:bg-slate/10 transition-colors duration-200'>
               <h4 className='text-lg font-medium text-gray-100'>
                 {project.name}
               </h4>

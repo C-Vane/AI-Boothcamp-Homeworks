@@ -60,7 +60,7 @@ function StatCard({
   const valueString = isPercentage ? `${value}%` : value;
 
   return (
-    <div className='bg-white/10 backdrop-blur-lg rounded-lg p-6 flex flex-col'>
+    <div className='bg-slate/10 backdrop-blur-lg rounded-lg p-6 flex flex-col'>
       <div className='flex items-center justify-between'>
         <span className='text-gray-200 text-sm'>{title}</span>
         <span className='text-gray-200'>{icon}</span>

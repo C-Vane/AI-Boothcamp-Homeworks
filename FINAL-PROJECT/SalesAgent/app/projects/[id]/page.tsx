@@ -34,10 +34,18 @@ export default function ProjectPage() {
 
       <Tabs
         defaultValue='targets'
-        className='space-y-4 bg-white/10 backdrop-blur-lg rounded-lg p-6'>
-        <TabsList>
-          <TabsTrigger value='targets'>Targets</TabsTrigger>
-          <TabsTrigger value='agents'>Agents</TabsTrigger>
+        className='space-y-4 bg-slate/10 backdrop-blur-lg rounded-lg p-6'>
+        <TabsList className='bg-gray-950/50'>
+          <TabsTrigger
+            value='targets'
+            className='data-[state=active]:bg-gray-900 data-[state=active]:text-white'>
+            Targets
+          </TabsTrigger>
+          <TabsTrigger
+            value='agents'
+            className='data-[state=active]:bg-gray-900 data-[state=active]:text-white'>
+            Agents
+          </TabsTrigger>
         </TabsList>
         <TabsContent value='targets' className='space-y-4'>
           <ProjectTargets project={project} />
