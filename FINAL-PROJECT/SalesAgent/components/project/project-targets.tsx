@@ -14,6 +14,8 @@ import { Badge } from "@/components/ui/badge";
 import { ProjectWithRelations } from "@/hooks/use-project";
 import { Pencil, Trash2 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { TargetCalls } from "./target-calls";
+import { Fragment, useState } from "react";
 
 const statusColors = {
   pending: "border-cyan-700 text-cyan-700",
@@ -24,6 +26,8 @@ const statusColors = {
 };
 
 export function ProjectTargets({ project }: { project: ProjectWithRelations }) {
+  const [selectedTargetId, setSelectedTargetId] = useState<string | null>(null);
+
   return (
     <div className='space-y-4'>
       <div className='flex justify-between'>
@@ -56,37 +60,56 @@ export function ProjectTargets({ project }: { project: ProjectWithRelations }) {
                 </TableCell>
               </TableRow>
             )}
-            {project.targets?.map((target, index) => (
-              <TableRow key={index}>
-                <TableCell className='font-medium'>{target.name}</TableCell>
-                <TableCell>{target.company}</TableCell>
-                <TableCell>{target.position}</TableCell>
-                <TableCell>
-                  <Badge
-                    variant={"outline"}
-                    className={cn("capitalize", statusColors[target.status])}>
-                    {target.status}
-                  </Badge>
-                </TableCell>
-                <TableCell>
-                  {target.email}
-                  <br />
-                  {target.phone}
-                </TableCell>
-                <TableCell className='text-right'>
-                  <div className='flex justify-end gap-2'>
-                    <Button variant='ghost' size='icon'>
-                      <Pencil className='h-4 w-4' />
-                    </Button>
-                    <Button
-                      variant='ghost'
-                      size='icon'
-                      className='text-destructive'>
-                      <Trash2 className='h-4 w-4' />
-                    </Button>
-                  </div>
-                </TableCell>
-              </TableRow>
+            {project.targets?.map((target) => (
+              <Fragment key={target._id.toString()}>
+                <TableRow
+                  onClick={() => setSelectedTargetId(target._id.toString())}>
+                  <TableCell className='font-medium'>{target.name}</TableCell>
+                  <TableCell>{target.company}</TableCell>
+                  <TableCell>{target.position}</TableCell>
+                  <TableCell>
+                    <Badge
+                      variant={"outline"}
+                      className={cn("capitalize", statusColors[target.status])}>
+                      {target.status}
+                    </Badge>
+                  </TableCell>
+                  <TableCell>
+                    {target.email}
+                    <br />
+                    {target.phone}
+                  </TableCell>
+                  <TableCell className='text-right'>
+                    <div className='flex justify-end gap-2'>
+                      <Button
+                        variant='ghost'
+                        className='h-8 w-8 p-0'
+                        onClick={
+                          () => {}
+                          //TODO: Target Edit Dialog
+                        }>
+                        <Pencil className='h-4 w-4' />
+                      </Button>
+
+                      <Button variant='ghost' size='icon'>
+                        <Trash2 className='h-4 w-4' />
+                      </Button>
+                    </div>
+                  </TableCell>
+                </TableRow>
+                {selectedTargetId === target._id.toString() && (
+                  <TableRow key={"calls" + selectedTargetId}>
+                    <TableCell
+                      colSpan={6}
+                      className='p-4 bg-slate-50 dark:bg-slate-900'>
+                      <TargetCalls
+                        projectId={project._id.toString()}
+                        targetId={target._id.toString()}
+                      />
+                    </TableCell>
+                  </TableRow>
+                )}
+              </Fragment>
             ))}
           </TableBody>
         </Table>

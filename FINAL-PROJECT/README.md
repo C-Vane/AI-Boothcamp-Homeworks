@@ -208,33 +208,49 @@ Targets have calls
   - [x] Implement the agent creation api call to 11labs (https://api.elevenlabs.io/v1/convai/agents)
   - [x] Implement the document upload api call to 11labs (https://api.elevenlabs.io/v1/convai/agents/{agent_id}/add-to-knowledge-base)
 
-- [ ] Implement Task and TODO list generation
+#### Conversation History
+
+- [x] Implement Task and TODO list generation
+  - [x] Save the conversations with an ID when a call ends
+  - [x] Show calls when clicking on a target
+  - [x] Show the call transcript, summery, and TODOs in call details
 
 ### Voice Call Simulation
 
-#### Call Interface
+#### Call Interface and Scheduling
+
+- [ ] Give agent more context update generic prompt with additional information
+- [ ] Improve user prompts with more context, and get additional product information from user
+- [ ] Get missing target information like their email address for calendar booking
+
+- [ ] Implement call scheduling
+- [ ] Create a server to run scheduled calls
+- [ ] Implement phone calling system
+
+or
 
 - [ ] Build mobile call interface
 - [ ] Implement ring animation
 - [ ] Create call timer component
 - [ ] Add call end animation
 
-#### Conversation History
+### Google Calendar Integration
 
-- [ ] Implement User access to conversation history
-- [ ] Implement call transcript summery
+[ ] Implement Google Calendar integration for admin
+[ ] Create a tool for the agent to get admin availabilities
+[ ] Create a tool for the agent to book a meeting
 
 ### Polish & Deployment
 
 #### Testing & Optimization
 
-- [ ] Add error handling
-- [ ] Implement fallback scenarios
+- [x] Add error handling
+- [x] Implement fallback scenarios
 
 #### Deploy & Document
 
-- [ ] Deploy to Vercel
-- [ ] Set up MongoDB Atlas
+- [x] Deploy to Vercel
+- [x] Set up MongoDB Atlas
 
 ## Getting Started
 

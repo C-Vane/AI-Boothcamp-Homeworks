@@ -107,7 +107,7 @@ export function ProjectAgents({ project }: { project: ProjectWithRelations }) {
                         className='max-h-36 overflow-scroll'>
                         {project.targets?.map((target) => (
                           <DropdownMenuItem
-                            key={target._id}
+                            key={target._id.toString()}
                             onClick={() =>
                               router.push(
                                 `/simulation/${agent.agent_id}/${target._id}`

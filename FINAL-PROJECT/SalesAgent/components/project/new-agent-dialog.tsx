@@ -32,9 +32,10 @@ import {
 import { Llm, Voice } from "elevenlabs/api";
 import { supportedLanguages } from "@/lib/utils";
 import { AudioPlayer } from "@/components/ui/audio-player";
+import { ObjectId } from "mongoose";
 
 interface NewAgentDialogProps {
-  projectId: string;
+  projectId: ObjectId;
 }
 
 export function NewAgentDialog({ projectId }: NewAgentDialogProps) {

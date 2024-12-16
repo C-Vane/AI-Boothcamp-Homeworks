@@ -1,7 +1,7 @@
-import mongoose, { Schema } from "mongoose";
+import mongoose, { ObjectId, Schema } from "mongoose";
 
 export interface ITarget {
-  _id: string;
+  _id: ObjectId;
   name: string;
   company: string;
   position: string;
@@ -14,8 +14,8 @@ export interface ITarget {
   lastContact: Date;
   notes: string;
   contactInCommon: string;
-  projectId: mongoose.Types.ObjectId;
-  agentId: mongoose.Types.ObjectId;
+  projectId: ObjectId;
+  agentId: ObjectId;
   createdAt: Date;
   updatedAt: Date;
 }

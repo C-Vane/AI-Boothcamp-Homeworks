@@ -1,8 +1,8 @@
-import mongoose, { Schema } from "mongoose";
+import mongoose, { ObjectId, Schema } from "mongoose";
 
 export interface IAgent {
   agentId: string;
-  projectId: mongoose.Types.ObjectId;
+  projectId: ObjectId;
   resources: string[];
 }
 

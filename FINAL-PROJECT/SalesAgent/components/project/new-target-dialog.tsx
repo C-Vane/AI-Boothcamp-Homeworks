@@ -20,9 +20,10 @@ import {
 } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
 import { Dialog, DialogTrigger } from "@radix-ui/react-dialog";
+import { ObjectId } from "mongoose";
 
 interface NewTargetDialogProps {
-  projectId: string;
+  projectId: ObjectId;
   agents: Array<{
     agent_id: string;
     name: string;

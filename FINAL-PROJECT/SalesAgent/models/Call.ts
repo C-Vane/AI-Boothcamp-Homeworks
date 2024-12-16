@@ -1,4 +1,4 @@
-import mongoose, { Schema } from "mongoose";
+import mongoose, { ObjectId, Schema } from "mongoose";
 
 interface ITranscriptEntry {
   timestamp: Date;
@@ -8,12 +8,13 @@ interface ITranscriptEntry {
 
 interface ITodoItem {
   task: string;
-  priority: string;
   status: string;
 }
 
 export interface ICall {
-  targetId: mongoose.Types.ObjectId;
+  conversationId: string;
+  agentId: string;
+  targetId: ObjectId;
   startTime: Date;
   endTime: Date;
   duration: number;
@@ -25,6 +26,8 @@ export interface ICall {
 
 const CallSchema = new Schema<ICall>(
   {
+    conversationId: { type: String, required: true },
+    agentId: { type: String, ref: "Agent", required: true },
     targetId: { type: Schema.Types.ObjectId, ref: "Target", required: true },
     startTime: { type: Date, required: true },
     endTime: { type: Date },
@@ -40,13 +43,16 @@ const CallSchema = new Schema<ICall>(
     todoItems: [
       {
         task: { type: String, required: true },
-        priority: { type: String, required: true },
-        status: { type: String, required: true },
+        status: {
+          type: String,
+          enum: ["completed", "in-progress", "todo"],
+          default: "todo",
+        },
       },
     ],
     status: {
       type: String,
-      enum: ["completed", "failed", "scheduled"],
+      enum: ["completed", "failed", "scheduled", "started"],
       default: "scheduled",
     },
   },

@@ -14,6 +14,7 @@ import { Conversation } from "@11labs/client";
 import { cn } from "@/lib/utils";
 import { ITarget } from "@/models";
 import { useToast } from "@/hooks/use-toast";
+import { ObjectId } from "mongoose";
 
 async function requestMicrophonePermission() {
   try {
@@ -29,8 +30,33 @@ async function getSignedUrl(agentId: string): Promise<string> {
   if (!response.ok) {
     throw Error("Failed to get signed url");
   }
-  const { url } = await response.json();
-  return url;
+  const { signedUrl } = await response.json();
+  return signedUrl;
+}
+
+async function saveConversationId(
+  agentId: string,
+  conversationId: string,
+  targetId: ObjectId,
+  projectId: ObjectId
+) {
+  await fetch(`/api/projects/${projectId}/calls`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ conversationId, agentId, targetId: targetId }),
+  });
+}
+
+async function callEnded(conversationId: string, projectId: ObjectId) {
+  await fetch(`/api/projects/${projectId}/calls`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ conversationId }),
+  });
 }
 
 export function ConvAI({
@@ -59,6 +85,8 @@ export function ConvAI({
 
       const signedUrl = await getSignedUrl(agentId);
 
+      console.log("Signed URL:", signedUrl);
+
       const conversation = await Conversation.startSession({
         signedUrl: signedUrl,
         onConnect: () => {
@@ -80,6 +108,11 @@ export function ConvAI({
           setIsSpeaking(mode === "speaking");
         },
       });
+
+      const conversationId = conversation.getId();
+
+      saveConversationId(agentId, conversationId, target._id, target.projectId);
+
       setConversation(conversation);
     } catch {
       toast({
@@ -92,7 +125,10 @@ export function ConvAI({
 
   async function endConversation() {
     if (conversation) {
+      callEnded(conversation.getId(), target.projectId);
+
       await conversation.endSession();
+
       setConversation(null);
     }
   }

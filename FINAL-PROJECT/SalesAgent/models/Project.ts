@@ -1,12 +1,12 @@
-import mongoose, { Schema } from "mongoose";
+import mongoose, { ObjectId, Schema } from "mongoose";
 
 export interface IProject {
-  _id: string;
+  _id: ObjectId;
   name: string;
   description: string;
   logo: string;
   industry: string;
-  adminId: mongoose.Types.ObjectId;
+  adminId: ObjectId;
   createdAt: Date;
   updatedAt: Date;
 }
