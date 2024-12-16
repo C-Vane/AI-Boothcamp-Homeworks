@@ -1,5 +1,4 @@
 import { NextResponse } from "next/server";
-import { ElevenLabsClient } from "elevenlabs";
 import { initElevenLabsClient } from "@/lib/11labs";
 
 export async function GET() {

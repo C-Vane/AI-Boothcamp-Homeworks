@@ -12,7 +12,6 @@ import {
 
 import { NewAgentDialog } from "./new-agent-dialog";
 
-import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { ProjectWithRelations } from "@/hooks/use-project";
 import { client } from "@/lib/11labs";
@@ -26,7 +25,6 @@ import {
 import { useRouter } from "next/navigation";
 
 export function ProjectAgents({ project }: { project: ProjectWithRelations }) {
-  const [selectedAgentId, setSelectedAgentId] = useState<string | null>(null);
   const { toast } = useToast();
   const router = useRouter();
 

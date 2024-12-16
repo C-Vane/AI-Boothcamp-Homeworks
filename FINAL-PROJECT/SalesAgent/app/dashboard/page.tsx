@@ -61,7 +61,7 @@ export default function DashboardPage() {
 
       {/* Projects Grid */}
       <div className='bg-white/10 backdrop-blur-lg rounded-lg p-6'>
-        <ProjectsGrid projects={data?.projects} />
+        <ProjectsGrid projects={data?.projects || []} />
       </div>
     </div>
   );

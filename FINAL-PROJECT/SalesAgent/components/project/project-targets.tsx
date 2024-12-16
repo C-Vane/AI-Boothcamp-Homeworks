@@ -9,7 +9,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { NewTargetDialog } from "./new-target-dialog";
 import { Badge } from "@/components/ui/badge";
 import { ProjectWithRelations } from "@/hooks/use-project";

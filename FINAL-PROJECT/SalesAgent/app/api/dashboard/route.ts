@@ -2,9 +2,10 @@ import { NextResponse } from "next/server";
 import dbConnect from "@/lib/db/connect";
 import { Target, Project, Call } from "@/models";
 import { getServerSession } from "next-auth";
-import { authOptions } from "../auth/[...nextauth]/route";
+
 import mongoose from "mongoose";
 import { DashboardData, IndustryProgress } from "@/hooks/us-dashboard-data";
+import { authOptions } from "../auth/[...nextauth]/auth";
 
 interface DailyCallStats {
   _id: string;

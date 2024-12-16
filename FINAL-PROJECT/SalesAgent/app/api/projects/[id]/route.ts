@@ -2,9 +2,9 @@ import { NextResponse } from "next/server";
 import dbConnect from "@/lib/db/connect";
 import { Agent, Project, Target } from "@/models";
 import { getServerSession } from "next-auth";
-import { authOptions } from "../../auth/[...nextauth]/route";
 import mongoose from "mongoose";
 import { initElevenLabsClient } from "@/lib/11labs";
+import { authOptions } from "../../auth/[...nextauth]/auth";
 
 export async function POST(request: Request) {
   try {

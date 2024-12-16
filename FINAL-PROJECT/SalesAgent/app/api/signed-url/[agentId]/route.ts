@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 
 export async function GET(
   request: Request,
-  { params }: { params: { agentId: string } }
+  { params }: { params: Promise<{ agentId: string }> }
 ) {
   const apiKey = process.env.XI_API_KEY;
 
@@ -11,7 +11,7 @@ export async function GET(
   }
 
   try {
-    const agentId = params.agentId;
+    const agentId = (await params).agentId;
 
     if (!agentId) {
       return NextResponse.json(

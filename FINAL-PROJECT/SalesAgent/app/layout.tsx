@@ -13,11 +13,11 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang='en' className={"h-full w-full"}>
-      <body className='antialiased w-full h-full lex flex-col relative'>
+    <html lang='en' className={"h-full w-full "}>
+      <body className='antialiased w-full h-full lex flex-col relative bg-gray-900'>
         <Providers>
           <div className='flex flex-col flex-grow w-full items-center justify-center sm:px-4'>
-            <div className='absolute inset-0 z-0 w-full'>
+            <div className='fixed inset-0 z-0 w-full'>
               <Image
                 src='/image.png'
                 alt='Background'
@@ -32,7 +32,7 @@ export default function RootLayout({
               }>
               <div className={"flex"}>
                 <Link href={"/"} prefetch={true}>
-                  <SalesAgentLogo className='h-[35px] w-auto hover:text-gray-500' />
+                  <SalesAgentLogo className='h-[35px] w-auto text-gray-600 hover:text-gray-500' />
                 </Link>
               </div>
 

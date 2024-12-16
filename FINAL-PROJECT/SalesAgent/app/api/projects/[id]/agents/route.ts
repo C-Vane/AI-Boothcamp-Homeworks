@@ -129,10 +129,12 @@ export async function GET(
 
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: { projectId: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     const { agentId } = await req.json();
+    const projectId = (await params).id;
+
     await dbConnect();
     const client = initElevenLabsClient();
 
@@ -140,7 +142,7 @@ export async function DELETE(
     await client.conversationalAi.deleteAgent(agentId);
 
     // Delete from database
-    await Agent.deleteOne({ agentId, projectId: params.projectId });
+    await Agent.deleteOne({ agentId, projectId });
 
     return NextResponse.json({ success: true });
   } catch (error) {
