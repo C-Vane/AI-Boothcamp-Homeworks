@@ -70,14 +70,16 @@ export function CallsChart({ data }: CallsChartProps) {
     labels: data.labels,
     datasets: [
       {
-        ...data.datasets[0],
-        borderColor: "rgb(59, 130, 246)", // blue-500
-        backgroundColor: "rgba(59, 130, 246, 0.5)",
+        label: "Outbound Calls",
+        data: data.datasets[0].data,
+        borderColor: "rgb(14, 116, 144)", // cyan-700
+        backgroundColor: "rgba(14, 116, 144, 0.5)",
       },
       {
-        ...data.datasets[1],
-        borderColor: "rgb(34, 197, 94)", // green-500
-        backgroundColor: "rgba(34, 197, 94, 0.5)",
+        label: "Inbound Calls",
+        data: data.datasets[1].data,
+        borderColor: "rgb(4, 120, 87)", // emerald-700
+        backgroundColor: "rgba(4, 120, 87, 0.5)",
       },
     ],
   };

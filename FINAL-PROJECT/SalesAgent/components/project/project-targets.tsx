@@ -13,12 +13,13 @@ import { NewTargetDialog } from "./new-target-dialog";
 import { Badge } from "@/components/ui/badge";
 import { ProjectWithRelations } from "@/hooks/use-project";
 import { Pencil, Trash2 } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 const statusColors = {
-  pending: "border-blue-500 text-blue-500",
+  pending: "border-cyan-700 text-cyan-700",
   contacted: "border-purple-500 text-purple-500",
   scheduled: "border-yellow-500 text-yellow-500",
-  completed: "border-green-500 text-green-500",
+  completed: "border-emerald-700 text-emerald-700",
   failed: "border-red-500 text-red-500",
 };
 
@@ -63,7 +64,7 @@ export function ProjectTargets({ project }: { project: ProjectWithRelations }) {
                 <TableCell>
                   <Badge
                     variant={"outline"}
-                    className={statusColors[target.status]}>
+                    className={cn("capitalize", statusColors[target.status])}>
                     {target.status}
                   </Badge>
                 </TableCell>
