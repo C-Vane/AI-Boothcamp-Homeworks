@@ -1,49 +1,51 @@
 "use client";
 
 import { Phone, BarChart, Users } from "lucide-react";
-import { NewProjectDialog } from "./new-project-dialog";
+import { NewCampaignDialog } from "./new-campaign-dialog";
 import Link from "next/link";
-import { Project } from "@/hooks/us-dashboard-data";
+import { Campaign } from "@/hooks/us-dashboard-data";
 
-interface ProjectsGridProps {
-  projects: Project[];
+interface CampaignsGridProps {
+  campaigns: Campaign[];
 }
 
-export function ProjectsGrid({ projects }: ProjectsGridProps) {
+export function CampaignsGrid({ campaigns }: CampaignsGridProps) {
   return (
     <div className='space-y-6'>
       <div className='flex justify-between items-center'>
-        <h3 className='text-lg font-semibold text-gray-100'>Active Projects</h3>
+        <h3 className='text-lg font-semibold text-gray-100'>
+          Active Campaigns
+        </h3>
 
-        <NewProjectDialog />
+        <NewCampaignDialog />
       </div>
 
       <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
-        {projects?.map((project) => (
+        {campaigns?.map((campaign) => (
           <Link
-            key={project.id}
-            href={`/projects/${project.id}`}
+            key={campaign.id}
+            href={`/campaign/${campaign.id}`}
             className='block group'>
             <div className='bg-white/5 backdrop-blur-lg rounded-lg p-6 space-y-4 hover:bg-slate/10 transition-colors duration-200'>
               <h4 className='text-lg font-medium text-gray-100'>
-                {project.name}
+                {campaign.name}
               </h4>
 
               <div className='grid grid-cols-3 gap-4'>
                 <Stat
                   icon={<Users className='w-4 h-4' />}
                   label='Targets'
-                  value={project.targets}
+                  value={campaign.targets}
                 />
                 <Stat
                   icon={<Phone className='w-4 h-4' />}
                   label='Calls'
-                  value={project.calls}
+                  value={campaign.calls}
                 />
                 <Stat
                   icon={<BarChart className='w-4 h-4' />}
                   label='Conv.'
-                  value={project.conversion}
+                  value={campaign.conversion}
                 />
               </div>
             </div>

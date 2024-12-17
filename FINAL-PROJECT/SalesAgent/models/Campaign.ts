@@ -1,6 +1,6 @@
 import mongoose, { ObjectId, Schema } from "mongoose";
 
-export interface IProject {
+export interface ICampaign {
   _id: ObjectId;
   name: string;
   description: string;
@@ -11,7 +11,7 @@ export interface IProject {
   updatedAt: Date;
 }
 
-const ProjectSchema = new Schema<IProject>(
+const CampaignSchema = new Schema<ICampaign>(
   {
     name: { type: String, required: true },
     description: { type: String },
@@ -26,5 +26,5 @@ const ProjectSchema = new Schema<IProject>(
   }
 );
 
-export default mongoose.models.Project ||
-  mongoose.model<IProject>("Project", ProjectSchema);
+export default mongoose.models.Campaign ||
+  mongoose.model<ICampaign>("Campaign", CampaignSchema);

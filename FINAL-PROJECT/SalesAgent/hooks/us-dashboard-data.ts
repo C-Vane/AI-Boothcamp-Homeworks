@@ -26,7 +26,7 @@ export interface Stats {
   };
 }
 
-export interface Project {
+export interface Campaign {
   id: string;
   name: string;
   targets: number;
@@ -44,7 +44,7 @@ export interface DashboardData {
       data: number[];
     }[];
   };
-  projects: Project[];
+  campaigns: Campaign[];
 }
 
 export function useDashboardData() {

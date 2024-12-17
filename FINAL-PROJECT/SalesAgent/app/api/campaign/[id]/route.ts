@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import dbConnect from "@/lib/db/connect";
-import { Agent, Project, Target } from "@/models";
+import { Agent, Campaign, Target } from "@/models";
 import { getServerSession } from "next-auth";
 import mongoose from "mongoose";
 import { initElevenLabsClient } from "@/lib/11labs";
@@ -23,8 +23,8 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Name is required" }, { status: 400 });
     }
 
-    // Create new project
-    const project = await Project.create({
+    // Create new campaign
+    const campaign = await Campaign.create({
       name,
       description,
       industry,
@@ -32,11 +32,11 @@ export async function POST(request: Request) {
       adminId: new mongoose.Types.ObjectId(session.user.id),
     });
 
-    return NextResponse.json(project);
+    return NextResponse.json(campaign);
   } catch (error) {
-    console.error("Project creation error:", error);
+    console.error("Campaign creation error:", error);
     return NextResponse.json(
-      { error: "Failed to create project" },
+      { error: "Failed to create campaign" },
       { status: 500 }
     );
   }
@@ -46,7 +46,7 @@ export async function GET(
   request: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  const projectId = (await params).id;
+  const campaignId = (await params).id;
   try {
     const session = await getServerSession(authOptions);
     if (!session?.user?.id) {
@@ -56,20 +56,23 @@ export async function GET(
     await dbConnect();
     const client = initElevenLabsClient();
 
-    if (!projectId) {
+    if (!campaignId) {
       return NextResponse.json(
-        { error: "Project ID is required" },
+        { error: "Campaign ID is required" },
         { status: 400 }
       );
     }
 
-    //get project with agents and targets
-    const project = await Project.findById(projectId);
+    //get campaign with agents and targets
+    const campaign = await Campaign.findById(campaignId);
 
-    const agentIds = await Agent.find({ projectId: projectId });
+    const agentIds = await Agent.find({ campaignId: campaignId });
 
-    if (!project) {
-      return NextResponse.json({ error: "Project not found" }, { status: 404 });
+    if (!campaign) {
+      return NextResponse.json(
+        { error: "Campaign not found" },
+        { status: 404 }
+      );
     }
 
     // Get agent details from 11Labs
@@ -84,13 +87,13 @@ export async function GET(
       })
     );
 
-    const targets = await Target.find({ projectId: projectId });
+    const targets = await Target.find({ campaignId: campaignId });
 
-    return NextResponse.json({ ...project.toObject(), agents, targets });
+    return NextResponse.json({ ...campaign.toObject(), agents, targets });
   } catch (error) {
-    console.error("Project creation error:", error);
+    console.error("Campaign creation error:", error);
     return NextResponse.json(
-      { error: "Failed to create project" },
+      { error: "Failed to create campaign" },
       { status: 500 }
     );
   }

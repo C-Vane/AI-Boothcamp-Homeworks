@@ -1,6 +1,8 @@
 import "dotenv/config";
-import { Target, Project, Agent, User, Call } from "../models";
+import { Target, Campaign, Agent, User, Call } from "../models";
 import dbConnect from "../lib/db/connect";
+import { Personality } from "@/lib/prompts/agentPrompt";
+import { Language } from "@/types/languages";
 
 import bcrypt from "bcryptjs";
 
@@ -12,7 +14,9 @@ const industries = [
   "Manufacturing",
 ];
 
-const statuses = ["pending", "scheduled", "completed", "failed"];
+const statuses = ["scheduled", "scheduled", "completed", "failed"];
+const languages = ["en", "es", "fr", "de", "it"] as Language[];
+const personalities = Object.values(Personality);
 
 async function generateRandomDate(start: Date, end: Date) {
   return new Date(
@@ -26,7 +30,7 @@ async function seedDatabase() {
 
     // Clear existing data
     await Target.deleteMany({});
-    await Project.deleteMany({});
+    await Campaign.deleteMany({});
     await Agent.deleteMany({});
     await User.deleteMany({});
     await Call.deleteMany({});
@@ -39,8 +43,8 @@ async function seedDatabase() {
       password: hashedPassword,
     });
 
-    // Create some projects
-    const projects = await Project.create([
+    // Create some campaigns
+    const campaigns = await Campaign.create([
       {
         name: "Tech Startups Campaign",
         description: "Outreach campaign for tech startups",
@@ -64,24 +68,37 @@ async function seedDatabase() {
       },
     ]);
 
-    // Create agents for each project
+    const agentIds = [
+      "oDFg5gmdDaDSB7m3iNcz",
+      "mAqBdobfGNNYnyTGZRFa",
+      "6zAXNr0xfisy4Le4o0NA",
+    ];
+
+    // Create agents for each campaign
     const agents = await Promise.all(
-      projects.map(async (project) => {
+      campaigns.map(async (campaign, index) => {
         return Agent.create({
-          agentId: `mAqBdobfGNNYnyTGZRFa`,
-          projectId: project._id,
+          agentId: agentIds[index],
+          campaignId: campaign._id,
+          personality:
+            personalities[Math.floor(Math.random() * personalities.length)],
+          resources: [
+            "Product brochure",
+            "Technical documentation",
+            "Case studies",
+          ],
         });
       })
     );
 
-    // Generate targets and calls for each project
+    // Generate targets and calls for each campaign
     const sevenDaysAgo = new Date();
     sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
 
-    for (let i = 0; i < projects.length; i++) {
-      const project = projects[i];
+    for (let i = 0; i < campaigns.length; i++) {
+      const campaign = campaigns[i];
       const agent = agents[i];
-      const targetsCount = Math.floor(Math.random() * 20) + 10; // 10-30 targets per project
+      const targetsCount = Math.floor(Math.random() * 20) + 10; // 10-30 targets per campaign
 
       for (let j = 0; j < targetsCount; j++) {
         const industry =
@@ -99,18 +116,17 @@ async function seedDatabase() {
           phone: `+1${Math.floor(Math.random() * 9000000000) + 1000000000}`,
           email: `contact${j + 1}@company${j + 1}.com`,
           status,
-          bestTimeToCall: ["Morning", "Afternoon", "Evening"][
-            Math.floor(Math.random() * 3)
-          ],
+          bestTimeToCall: "9:00-17:00",
           timezone: "UTC",
-          lastContact: status !== "pending" ? lastContact : null,
+          lastContact: status !== "scheduled" ? lastContact : null,
           notes: "Initial contact to be made",
-          projectId: project._id,
+          campaignId: campaign._id,
           agentId: agent._id,
+          language: languages[Math.floor(Math.random() * languages.length)],
         });
 
-        // Generate 1-3 calls for each target that's not pending
-        if (status !== "pending") {
+        // Generate 1-3 calls for each target that's not scheduled
+        if (status !== "scheduled") {
           const numCalls = Math.floor(Math.random() * 3) + 1;
           for (let k = 0; k < numCalls; k++) {
             const callStartTime = await generateRandomDate(
@@ -148,16 +164,18 @@ async function seedDatabase() {
               {
                 task: "Follow up on pricing discussion",
                 priority: "high",
-                status: "pending",
+                status: "todo",
               },
               {
                 task: "Send product documentation",
                 priority: "medium",
-                status: "pending",
+                status: "todo",
               },
             ];
 
             await Call.create({
+              conversationId: "9kXbhoBJlYQQDActat8E",
+              agentId: agent.agentId,
               targetId: target._id,
               startTime: callStartTime,
               endTime: callEndTime,

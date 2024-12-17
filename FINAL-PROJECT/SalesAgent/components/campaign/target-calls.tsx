@@ -13,7 +13,7 @@ import { Badge } from "@/components/ui/badge";
 import { CallDetailsDialog } from "./call-details-dialog";
 
 interface TargetCallsProps {
-  projectId: string;
+  campaignId: string;
   targetId: string;
 }
 
@@ -24,7 +24,7 @@ const statusColors = {
   started: "bg-cyan-700 hover:bg-cyan-800",
 };
 
-export function TargetCalls({ projectId, targetId }: TargetCallsProps) {
+export function TargetCalls({ campaignId, targetId }: TargetCallsProps) {
   const [calls, setCalls] = useState<ICall[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -32,7 +32,7 @@ export function TargetCalls({ projectId, targetId }: TargetCallsProps) {
     async function fetchCalls() {
       try {
         const response = await fetch(
-          `/api/projects/${projectId}/targets/${targetId}/calls`
+          `/api/campaign/${campaignId}/targets/${targetId}/calls`
         );
         if (!response.ok) throw new Error("Failed to fetch calls");
         const data = await response.json();
@@ -45,7 +45,7 @@ export function TargetCalls({ projectId, targetId }: TargetCallsProps) {
     }
 
     fetchCalls();
-  }, [projectId, targetId]);
+  }, [campaignId, targetId]);
 
   if (loading) {
     return <div>Loading calls...</div>;
@@ -56,8 +56,8 @@ export function TargetCalls({ projectId, targetId }: TargetCallsProps) {
   }
 
   return (
-    <div className="space-y-4">
-      <h3 className="text-lg font-semibold">Call History</h3>
+    <div className='space-y-4'>
+      <h3 className='text-lg font-semibold'>Call History</h3>
       <Table>
         <TableHeader>
           <TableRow>
@@ -65,15 +65,13 @@ export function TargetCalls({ projectId, targetId }: TargetCallsProps) {
             <TableHead>Duration</TableHead>
             <TableHead>Status</TableHead>
             <TableHead>Action Items</TableHead>
-            <TableHead className="text-right">Actions</TableHead>
+            <TableHead className='text-right'>Actions</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           {calls.map((call) => (
             <TableRow key={call.conversationId}>
-              <TableCell>
-                {format(new Date(call.startTime), "PPp")}
-              </TableCell>
+              <TableCell>{format(new Date(call.startTime), "PPp")}</TableCell>
               <TableCell>
                 {call.duration
                   ? `${Math.round(call.duration / 1000 / 60)} minutes`
@@ -90,7 +88,7 @@ export function TargetCalls({ projectId, targetId }: TargetCallsProps) {
                   .length || 0}{" "}
                 completed)
               </TableCell>
-              <TableCell className="text-right">
+              <TableCell className='text-right'>
                 <CallDetailsDialog call={call} />
               </TableCell>
             </TableRow>

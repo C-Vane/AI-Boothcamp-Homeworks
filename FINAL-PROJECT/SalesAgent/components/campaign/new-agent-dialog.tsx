@@ -35,10 +35,10 @@ import { AudioPlayer } from "@/components/ui/audio-player";
 import { ObjectId } from "mongoose";
 
 interface NewAgentDialogProps {
-  projectId: ObjectId;
+  campaignId: ObjectId;
 }
 
-export function NewAgentDialog({ projectId }: NewAgentDialogProps) {
+export function NewAgentDialog({ campaignId }: NewAgentDialogProps) {
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
   const [totalFileSize, setTotalFileSize] = useState(0);
@@ -104,11 +104,11 @@ export function NewAgentDialog({ projectId }: NewAgentDialogProps) {
     try {
       const formData = new FormData(e.currentTarget);
 
-      if (!projectId) {
-        throw new Error("Project ID is required");
+      if (!campaignId) {
+        throw new Error("Campaign ID is required");
       }
 
-      const response = await fetch(`/api/projects/${projectId}/agents`, {
+      const response = await fetch(`/api/campaign/${campaignId}/agents`, {
         method: "POST",
         body: formData,
       });

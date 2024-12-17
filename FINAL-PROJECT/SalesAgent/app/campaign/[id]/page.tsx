@@ -1,15 +1,15 @@
 "use client";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ProjectHeader } from "@/components/project/project-header";
-import { ProjectTargets } from "@/components/project/project-targets";
-import { ProjectAgents } from "@/components/project/project-agents";
-import { useProject } from "@/hooks/use-project";
+import { CampaignHeader } from "@/components/campaign/campaign-header";
+import { CampaignTargets } from "@/components/campaign/campaign-targets";
+import { CampaignAgents } from "@/components/campaign/campaign-agents";
+import { useCampaign } from "@/hooks/use-campaign";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useParams } from "next/navigation";
 
-export default function ProjectPage() {
+export default function CampaignPage() {
   const { id } = useParams<{ id: string }>();
-  const { project, error, loading } = useProject(id);
+  const { campaign, error, loading } = useCampaign(id);
 
   if (error) {
     return <div>Error: {error}</div>;
@@ -24,13 +24,13 @@ export default function ProjectPage() {
     );
   }
 
-  if (!project) {
-    return <div>Project not found</div>;
+  if (!campaign) {
+    return <div>Campaign not found</div>;
   }
 
   return (
     <div className='flex-1 space-y-4 p-4 md:p-8 pt-6 w-full max-w-7xl mx-auto'>
-      <ProjectHeader project={project} />
+      <CampaignHeader campaign={campaign} />
 
       <Tabs
         defaultValue='targets'
@@ -48,10 +48,10 @@ export default function ProjectPage() {
           </TabsTrigger>
         </TabsList>
         <TabsContent value='targets' className='space-y-4'>
-          <ProjectTargets project={project} />
+          <CampaignTargets campaign={campaign} />
         </TabsContent>
         <TabsContent value='agents' className='space-y-4'>
-          <ProjectAgents project={project} />
+          <CampaignAgents campaign={campaign} />
         </TabsContent>
       </Tabs>
     </div>

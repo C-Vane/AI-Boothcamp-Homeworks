@@ -23,16 +23,16 @@ import { Dialog, DialogTrigger } from "@radix-ui/react-dialog";
 import { ObjectId } from "mongoose";
 
 interface NewTargetDialogProps {
-  projectId: ObjectId;
+  campaignId: ObjectId;
   agents: Array<{
-    agent_id: string;
+    agentId: string;
     name: string;
   }>;
 }
 
 const timeZones = Intl.supportedValuesOf("timeZone");
 
-export function NewTargetDialog({ projectId, agents }: NewTargetDialogProps) {
+export function NewTargetDialog({ campaignId, agents }: NewTargetDialogProps) {
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
@@ -58,7 +58,7 @@ export function NewTargetDialog({ projectId, agents }: NewTargetDialogProps) {
     };
 
     try {
-      const response = await fetch(`/api/projects/${projectId}/targets`, {
+      const response = await fetch(`/api/campaign/${campaignId}/targets`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -95,7 +95,7 @@ export function NewTargetDialog({ projectId, agents }: NewTargetDialogProps) {
         <DialogHeader>
           <DialogTitle>Add New Target</DialogTitle>
           <DialogDescription>
-            Add a new target to your project. Fill in the details below.
+            Add a new target to your campaign. Fill in the details below.
           </DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit}>
@@ -223,11 +223,11 @@ export function NewTargetDialog({ projectId, agents }: NewTargetDialogProps) {
               </Label>
               <Select name='agentId'>
                 <SelectTrigger className='col-span-2'>
-                  <SelectValue placeholder='Select an agent' />
+                  <SelectValue placeholder='Select an agent ' />
                 </SelectTrigger>
                 <SelectContent>
                   {agents.map((agent) => (
-                    <SelectItem key={agent.agent_id} value={agent.agent_id}>
+                    <SelectItem key={agent.agentId} value={agent.agentId}>
                       {agent.name}
                     </SelectItem>
                   ))}

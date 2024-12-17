@@ -39,9 +39,9 @@ async function saveConversationId(
   agentId: string,
   conversationId: string,
   targetId: ObjectId,
-  projectId: ObjectId
+  campaignId: ObjectId
 ) {
-  await fetch(`/api/projects/${projectId}/calls`, {
+  await fetch(`/api/campaign/${campaignId}/calls`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -50,8 +50,8 @@ async function saveConversationId(
   });
 }
 
-async function callEnded(conversationId: string, projectId: ObjectId) {
-  await fetch(`/api/projects/${projectId}/calls`, {
+async function callEnded(conversationId: string, campaignId: ObjectId) {
+  await fetch(`/api/campaign/${campaignId}/calls`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
@@ -120,7 +120,12 @@ export function ConvAI({
 
       const conversationId = conversation.getId();
 
-      saveConversationId(agentId, conversationId, target._id, target.projectId);
+      saveConversationId(
+        agentId,
+        conversationId,
+        target._id,
+        target.campaignId
+      );
 
       setConversation(conversation);
     } catch {
@@ -136,7 +141,7 @@ export function ConvAI({
     if (conversation) {
       await conversation.endSession();
 
-      callEnded(conversation.getId(), target.projectId);
+      callEnded(conversation.getId(), target.campaignId);
       setConversation(null);
     }
   }

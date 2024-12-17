@@ -31,7 +31,7 @@ const industries = [
   "Manufacturing",
 ];
 
-export function NewProjectDialog() {
+export function NewCampaignDialog() {
   const { toast } = useToast();
   const [open, setOpen] = useState(false);
 
@@ -46,7 +46,7 @@ export function NewProjectDialog() {
     };
 
     try {
-      const response = await fetch("/api/projects", {
+      const response = await fetch("/api/campaigns", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -55,19 +55,19 @@ export function NewProjectDialog() {
       });
 
       if (!response.ok) {
-        throw new Error("Failed to create project");
+        throw new Error("Failed to create campaign");
       }
 
       toast({
         title: "Success",
-        description: "Project created successfully",
+        description: "Campaign created successfully",
       });
       setOpen(false);
-      // You might want to refresh the projects list here
+      // You might want to refresh the campaigns list here
     } catch {
       toast({
         title: "Error",
-        description: "Failed to create project",
+        description: "Failed to create campaign",
         variant: "destructive",
       });
     }
@@ -76,14 +76,14 @@ export function NewProjectDialog() {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button>New Project</Button>
+        <Button>New Campaign</Button>
       </DialogTrigger>
       <DialogContent className='sm:max-w-[425px]'>
         <form onSubmit={handleSubmit} className='space-y-4'>
           <DialogHeader>
-            <DialogTitle>Create New Project</DialogTitle>
+            <DialogTitle>Create New Campaign</DialogTitle>
             <DialogDescription>
-              Create a new project to manage your sales targets and agents.
+              Create a new campaign to manage your sales targets and agents.
             </DialogDescription>
           </DialogHeader>
           <div className='space-y-2'>
@@ -119,7 +119,7 @@ export function NewProjectDialog() {
           </div>
           <DialogFooter>
             <Button type='submit' className='w-full'>
-              Create Project
+              Create Campaign
             </Button>
           </DialogFooter>
         </form>

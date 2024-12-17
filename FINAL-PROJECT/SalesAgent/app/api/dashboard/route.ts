@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import dbConnect from "@/lib/db/connect";
-import { Target, Project, Call } from "@/models";
+import { Target, Campaign, Call } from "@/models";
 import { getServerSession } from "next-auth";
 
 import mongoose from "mongoose";
@@ -22,8 +22,8 @@ export async function GET() {
 
     await dbConnect();
 
-    // Get admin's projects with aggregated data
-    const projects = await Project.aggregate([
+    // Get admin's campaigns with aggregated data
+    const campaigns = await Campaign.aggregate([
       {
         $match: {
           adminId: new mongoose.Types.ObjectId(session.user.id),
@@ -33,24 +33,24 @@ export async function GET() {
         $lookup: {
           from: "targets",
           localField: "_id",
-          foreignField: "projectId",
-          as: "projectTargets",
+          foreignField: "campaignId",
+          as: "campaignTargets",
         },
       },
       {
         $lookup: {
           from: "calls",
-          localField: "projectTargets._id",
+          localField: "campaignTargets._id",
           foreignField: "targetId",
-          as: "projectCalls",
+          as: "campaignCalls",
         },
       },
       {
         $project: {
           id: "$_id",
           name: 1,
-          targets: { $size: "$projectTargets" },
-          calls: { $size: "$projectCalls" },
+          targets: { $size: "$campaignTargets" },
+          calls: { $size: "$campaignCalls" },
           conversion: {
             $concat: [
               {
@@ -60,14 +60,14 @@ export async function GET() {
                       $multiply: [
                         {
                           $cond: [
-                            { $eq: [{ $size: "$projectCalls" }, 0] },
+                            { $eq: [{ $size: "$campaignCalls" }, 0] },
                             0,
                             {
                               $divide: [
                                 {
                                   $size: {
                                     $filter: {
-                                      input: "$projectTargets",
+                                      input: "$campaignTargets",
                                       as: "target",
                                       cond: {
                                         $eq: ["$$target.status", "completed"],
@@ -75,7 +75,7 @@ export async function GET() {
                                     },
                                   },
                                 },
-                                { $size: "$projectTargets" },
+                                { $size: "$campaignTargets" },
                               ],
                             },
                           ],
@@ -94,21 +94,21 @@ export async function GET() {
       },
     ]);
 
-    // Get all targets for admin's projects
-    const adminProjects = await Project.find({
+    // Get all targets for admin's campaigns
+    const adminCampaigns = await Campaign.find({
       adminId: new mongoose.Types.ObjectId(session.user.id),
     });
 
-    const projectIds = adminProjects.map((project) => project._id);
+    const campaignIds = adminCampaigns.map((campaign) => campaign._id);
 
     const targets = await Target.find({
-      projectId: { $in: projectIds },
+      campaignId: { $in: campaignIds },
     });
 
     const targetIds = targets.map((target) => target._id);
 
     const lastWeekTargets = await Target.find({
-      projectId: { $in: projectIds },
+      campaignId: { $in: campaignIds },
       lastContact: {
         $gte: new Date(new Date().getTime() - 7 * 24 * 60 * 60 * 1000),
       },
@@ -237,7 +237,7 @@ export async function GET() {
           },
         ],
       },
-      projects,
+      campaigns,
     };
 
     return NextResponse.json(dashboardData);

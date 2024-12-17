@@ -1,6 +1,6 @@
 "use client";
 
-import { ProjectsGrid } from "@/components/dashboard/projects-grid";
+import { CampaignsGrid } from "@/components/dashboard/campaigns-grid";
 import { StatsCards } from "@/components/dashboard/stats-cards";
 import { CallsChart } from "@/components/dashboard/calls-chart";
 import { TargetsProgress } from "@/components/dashboard/targets-progress";
@@ -59,9 +59,9 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      {/* Projects Grid */}
+      {/* Campaigns Grid */}
       <div className='bg-slate/10 backdrop-blur-lg rounded-lg p-6'>
-        <ProjectsGrid projects={data?.projects || []} />
+        <CampaignsGrid campaigns={data?.campaigns || []} />
       </div>
     </div>
   );

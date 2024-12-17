@@ -14,7 +14,7 @@ export async function POST(
     await dbConnect();
     const client = initElevenLabsClient();
 
-    const projectId = (await params).id;
+    const campaignId = (await params).id;
 
     const formData = await req.formData();
 
@@ -91,7 +91,7 @@ export async function POST(
     // Create agent record in database
     const agent = await Agent.create({
       agentId: newAgent.agent_id,
-      projectId,
+      campaignId,
       resources,
     });
 
@@ -112,9 +112,9 @@ export async function GET(
   try {
     await dbConnect();
     const client = initElevenLabsClient();
-    const projectId = (await params).id;
+    const campaignId = (await params).id;
 
-    const agents = await Agent.find({ projectId });
+    const agents = await Agent.find({ campaignId });
 
     // Fetch full agent details from ElevenLabs
     const agentDetails = await Promise.all(
@@ -143,7 +143,7 @@ export async function DELETE(
 ) {
   try {
     const { agentId } = await req.json();
-    const projectId = (await params).id;
+    const campaignId = (await params).id;
 
     await dbConnect();
     const client = initElevenLabsClient();
@@ -152,7 +152,7 @@ export async function DELETE(
     await client.conversationalAi.deleteAgent(agentId);
 
     // Delete from database
-    await Agent.deleteOne({ agentId, projectId });
+    await Agent.deleteOne({ agentId, campaignId });
 
     return NextResponse.json({ success: true });
   } catch (error) {

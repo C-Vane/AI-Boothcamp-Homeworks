@@ -15,7 +15,7 @@ export interface ITarget {
   lastContact: Date;
   notes: string;
   contactInCommon: string;
-  projectId: ObjectId;
+  campaignId: ObjectId;
   agentId: ObjectId;
   createdAt: Date;
   updatedAt: Date;
@@ -40,8 +40,12 @@ const TargetSchema = new Schema<ITarget>(
     lastContact: { type: Date },
     notes: { type: String },
     contactInCommon: { type: String },
-    projectId: { type: Schema.Types.ObjectId, ref: "Project", required: true },
-    agentId: { type: Schema.Types.ObjectId, ref: "Agent" },
+    campaignId: {
+      type: Schema.Types.ObjectId,
+      ref: "Campaign",
+      required: true,
+    },
+    agentId: { type: String, ref: "Agent" },
     createdAt: { type: Date, default: Date.now },
     updatedAt: { type: Date, default: Date.now },
     language: { type: String, default: "en", required: true },

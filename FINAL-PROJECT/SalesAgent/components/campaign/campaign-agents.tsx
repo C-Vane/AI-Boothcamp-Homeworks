@@ -13,7 +13,7 @@ import {
 import { NewAgentDialog } from "./new-agent-dialog";
 
 import { useToast } from "@/hooks/use-toast";
-import { ProjectWithRelations } from "@/hooks/use-project";
+import { CampaignWithRelations } from "@/hooks/use-campaign";
 import { client } from "@/lib/11labs";
 import { Pencil, Play, Trash2 } from "lucide-react";
 import {
@@ -24,14 +24,18 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useRouter } from "next/navigation";
 
-export function ProjectAgents({ project }: { project: ProjectWithRelations }) {
+export function CampaignAgents({
+  campaign,
+}: {
+  campaign: CampaignWithRelations;
+}) {
   const { toast } = useToast();
   const router = useRouter();
 
   const handleDeleteAgent = async (agentId: string) => {
     try {
       await client.conversationalAi.deleteAgent(agentId);
-      // Update project in database to remove agent
+      // Update campaign in database to remove agent
       toast({
         title: "Success",
         description: "Agent deleted successfully",
@@ -49,7 +53,7 @@ export function ProjectAgents({ project }: { project: ProjectWithRelations }) {
     <div className='space-y-4'>
       <div className='flex justify-between'>
         <h3 className='text-lg font-medium'>AI Sales Agents</h3>
-        <NewAgentDialog projectId={project._id} />
+        <NewAgentDialog campaignId={campaign._id} />
       </div>
 
       <div className='rounded-md border'>
@@ -65,14 +69,14 @@ export function ProjectAgents({ project }: { project: ProjectWithRelations }) {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {!project.agents?.length && (
+            {!campaign.agents?.length && (
               <TableRow>
                 <TableCell colSpan={6} className='h-24 text-center'>
                   No agents found.
                 </TableCell>
               </TableRow>
             )}
-            {project.agents?.map((agent) => (
+            {campaign.agents?.map((agent) => (
               <TableRow key={agent.agent_id}>
                 <TableCell className='font-medium'>
                   <div>
@@ -105,7 +109,7 @@ export function ProjectAgents({ project }: { project: ProjectWithRelations }) {
                       <DropdownMenuContent
                         align='end'
                         className='max-h-36 overflow-scroll'>
-                        {project.targets?.map((target) => (
+                        {campaign.targets?.map((target) => (
                           <DropdownMenuItem
                             key={target._id.toString()}
                             onClick={() =>
