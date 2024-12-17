@@ -257,6 +257,7 @@ pnpm install
 MONGODB_URI=your_mongodb_uri
 XI_API_KEY=your_elevenlabs_key
 OPENAI_API_KEY=your_openai_key
+NEXTAUTH_SECRET=your_nextauth_secret
 ```
 
 4. Run the development server

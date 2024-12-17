@@ -1,5 +1,3 @@
-## Conversational AI Demo
-
 ## Setup
 
 Set up the environment variables:
