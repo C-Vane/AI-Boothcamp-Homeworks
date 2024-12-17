@@ -219,20 +219,9 @@ Targets have calls
 
 #### Call Interface and Scheduling
 
-- [ ] Give agent more context update generic prompt with additional information
-- [ ] Improve user prompts with more context, and get additional product information from user
-- [ ] Get missing target information like their email address for calendar booking
-
-- [ ] Implement call scheduling
-- [ ] Create a server to run scheduled calls
-- [ ] Implement phone calling system
-
-or
-
-- [ ] Build mobile call interface
-- [ ] Implement ring animation
-- [ ] Create call timer component
-- [ ] Add call end animation
+- [x] Give agent more context update generic prompt with additional information
+- [x] Improve user prompts with more context, and get additional product information from user
+- [x] Get missing target information like their email address for calendar booking
 
 ### Google Calendar Integration
 
@@ -302,3 +291,7 @@ pnpm seed
 ## Deployment
 
 The application will be deployed on Vercel with MongoDB Atlas for database storage.
+
+## License
+
+The license of this project can be found under LICENSE in the final project directory.

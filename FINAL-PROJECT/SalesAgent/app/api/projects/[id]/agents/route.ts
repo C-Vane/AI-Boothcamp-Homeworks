@@ -45,7 +45,17 @@ export async function POST(
           client_events: undefined,
         },
       },
-      platform_settings: {},
+      platform_settings: {
+        overrides: {
+          conversation_config_override: {
+            agent: {
+              prompt: {
+                prompt: true,
+              },
+            },
+          },
+        },
+      },
     };
 
     // Create agent in ElevenLabs

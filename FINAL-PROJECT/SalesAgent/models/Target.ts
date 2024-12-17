@@ -1,3 +1,4 @@
+import { Language } from "@/types/languages";
 import mongoose, { ObjectId, Schema } from "mongoose";
 
 export interface ITarget {
@@ -18,6 +19,7 @@ export interface ITarget {
   agentId: ObjectId;
   createdAt: Date;
   updatedAt: Date;
+  language: Language;
 }
 
 const TargetSchema = new Schema<ITarget>(
@@ -42,6 +44,7 @@ const TargetSchema = new Schema<ITarget>(
     agentId: { type: Schema.Types.ObjectId, ref: "Agent" },
     createdAt: { type: Date, default: Date.now },
     updatedAt: { type: Date, default: Date.now },
+    language: { type: String, default: "en", required: true },
   },
   {
     timestamps: true,

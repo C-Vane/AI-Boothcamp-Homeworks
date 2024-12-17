@@ -12,9 +12,10 @@ import {
 } from "@/components/ui/card";
 import { Conversation } from "@11labs/client";
 import { cn } from "@/lib/utils";
-import { ITarget } from "@/models";
+import { IAgent, ITarget } from "@/models";
 import { useToast } from "@/hooks/use-toast";
 import { ObjectId } from "mongoose";
+import { GetAgentResponseModel } from "elevenlabs/api";
 
 async function requestMicrophonePermission() {
   try {
@@ -62,9 +63,11 @@ async function callEnded(conversationId: string, projectId: ObjectId) {
 export function ConvAI({
   agentId,
   target,
+  agent,
 }: {
   agentId: string;
   target: ITarget;
+  agent: IAgent & GetAgentResponseModel & { prompt: string };
 }) {
   const { toast } = useToast();
   const [conversation, setConversation] = useState<Conversation | null>(null);
@@ -89,6 +92,14 @@ export function ConvAI({
 
       const conversation = await Conversation.startSession({
         signedUrl: signedUrl,
+        overrides: {
+          agent: {
+            prompt: {
+              prompt: agent.prompt,
+            },
+            language: target.language || "en",
+          },
+        },
         onConnect: () => {
           setIsConnected(true);
           setIsSpeaking(true);
