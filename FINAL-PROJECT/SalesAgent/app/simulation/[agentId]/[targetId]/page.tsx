@@ -18,7 +18,7 @@ export default async function SimulationPage({ params }: SimulationProps) {
   await dbConnect();
   const [target, agent] = await Promise.all([
     Target.findById(targetId),
-    Agent.findById(agentId),
+    Agent.findOne({ agentId: agentId }),
   ]);
 
   if (!target || !agent) {
