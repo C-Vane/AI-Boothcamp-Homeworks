@@ -119,7 +119,11 @@ export function CampaignTargets({ campaign }: CampaignTargetsProps) {
               targets.map((target: ITarget) => (
                 <Fragment key={target._id.toString()}>
                   <TableRow
-                    onClick={() => setSelectedTargetId(target._id.toString())}
+                    onClick={() =>
+                      selectedTargetId === target._id.toString()
+                        ? setSelectedTargetId(null)
+                        : setSelectedTargetId(target._id.toString())
+                    }
                     className='cursor-pointer'>
                     <TableCell className='font-medium'>{target.name}</TableCell>
                     <TableCell>{target.company}</TableCell>
@@ -166,7 +170,9 @@ export function CampaignTargets({ campaign }: CampaignTargetsProps) {
                   </TableRow>
                   {selectedTargetId === target._id.toString() && (
                     <TableRow>
-                      <TableCell colSpan={6} className='p-0'>
+                      <TableCell
+                        colSpan={6}
+                        className='p-4 bg-slate-50 dark:bg-slate-900'>
                         <TargetCalls
                           targetId={target._id.toString()}
                           campaignId={campaign._id.toString()}
