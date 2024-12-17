@@ -1,72 +1,74 @@
-import { NextRequest, NextResponse } from "next/server";
+import { google } from 'googleapis';
+import { NextRequest, NextResponse } from 'next/server';
 import dbConnect from "@/lib/db/connect";
+import User from "@/models/User";
+import Agent from "@/models/Agent";
 import Target from "@/models/Target";
+
+// Configure Google Calendar
+const oauth2Client = new google.auth.OAuth2(
+  process.env.GOOGLE_CLIENT_ID,
+  process.env.GOOGLE_CLIENT_SECRET,
+  'http://localhost:3000/api/auth/callback/google'
+);
+
+const calendar = google.calendar({ version: 'v3', auth: oauth2Client });
 
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const {
-      agentId,
-      targetId,
-      targetEmail,
-      startTime,
-      duration,
-      title,
-      description,
-    } = body;
+    const { agentId, targetId, date, startTime, endTime, title, description } = body;
 
-    if (!agentId || !targetId || !startTime || !duration || !title) {
-      return NextResponse.json(
-        { error: "Missing required parameters" },
-        { status: 400 }
-      );
+    if (!agentId || !targetId || !date || !startTime || !endTime || !title) {
+      return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
     }
 
     await dbConnect();
 
-    // Get target details
-    const target = await Target.findById(targetId);
-    if (!target) {
-      return NextResponse.json({ error: "Target not found" }, { status: 404 });
+    // Fetch agent and user details
+    const agent = await Agent.findById(agentId);
+    if (!agent) {
+      return NextResponse.json({ error: 'Agent not found' }, { status: 404 });
     }
 
-    // TODO: Implement calendar integration
-    // This would typically involve:
-    // 1. Get the user owner of the agent
-    // 2. Getting the user's calendar credentials
-    // 3. Creating a calendar event
-    // 4. Sending an invitation to the target's email
-    // 5. Updating the target's status to completed in the database
+    const user = await User.findById(agent.userId);
+    if (!user) {
+      return NextResponse.json({ error: 'User not found' }, { status: 404 });
+    }
 
-    //If the we receive the target email and it's valid and different from the target's email update db
+    // Fetch target details
+    const target = await Target.findById(targetId);
+    if (!target) {
+      return NextResponse.json({ error: 'Target not found' }, { status: 404 });
+    }
 
-    // For now, return mock data
-    const meeting = {
-      id: "mock-meeting-id",
-      title,
+    // Create calendar event
+    const event = {
+      summary: title,
       description,
-      startTime,
-      duration,
+      start: {
+        dateTime: `${date}T${startTime}`,
+        timeZone: 'UTC',
+      },
+      end: {
+        dateTime: `${date}T${endTime}`,
+        timeZone: 'UTC',
+      },
       attendees: [
-        { email: target.email, name: target.name },
-        // Add user's email here
+        { email: user.email },
+        { email: target.email },
       ],
     };
 
-    console.log(targetEmail);
-
-    // Update target status
-    await Target.findByIdAndUpdate(targetId, {
-      status: "scheduled",
-      lastContact: new Date(),
+    const response = await calendar.events.insert({
+      calendarId: 'primary',
+      requestBody: event,
+      sendUpdates: 'all',
     });
 
-    return NextResponse.json({ meeting });
+    return NextResponse.json({ success: true, eventId: response.data.id });
   } catch (error) {
-    console.error("Error scheduling meeting:", error);
-    return NextResponse.json(
-      { error: "Failed to schedule meeting" },
-      { status: 500 }
-    );
+    console.error('Error scheduling meeting:', error);
+    return NextResponse.json({ error: 'Failed to schedule meeting' }, { status: 500 });
   }
 }
