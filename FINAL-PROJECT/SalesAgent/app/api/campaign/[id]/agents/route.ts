@@ -5,6 +5,7 @@ import Agent from "@/models/Agent";
 import { BodyCreateAgentV1ConvaiAgentsCreatePost, Llm } from "elevenlabs/api";
 import { initElevenLabsClient } from "@/lib/11labs";
 import dbConnect from "@/lib/db/connect";
+import { calendarTools } from "@/types/tools";
 
 export async function POST(
   req: NextRequest,
@@ -27,7 +28,7 @@ export async function POST(
             llm: String(formData.get("model")) as Llm,
             temperature: 0.5,
             max_tokens: 300,
-            tools: [],
+            tools: calendarTools,
             knowledge_base: undefined,
             custom_llm: undefined,
           },
@@ -93,6 +94,7 @@ export async function POST(
       agentId: newAgent.agent_id,
       campaignId,
       resources,
+      tools: calendarTools,
     });
 
     return NextResponse.json({ agent, resources });

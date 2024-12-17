@@ -7,6 +7,7 @@ import OpenAI from "openai";
 import { zodResponseFormat } from "openai/helpers/zod";
 import { z } from "zod";
 import { initElevenLabsClient } from "@/lib/11labs";
+import { Target } from "@/models";
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
@@ -116,6 +117,30 @@ export async function PUT(req: NextRequest) {
       response_format: zodResponseFormat(todoItemsSchema, "todo_items"),
     });
 
+    // Get the status of the call if completed form the summery
+    const statusCompletion = await openai.chat.completions.create({
+      model: "gpt-4o",
+      messages: [
+        {
+          role: "system",
+          content:
+            "You are a sales call analyzer. Analyze the following sales call transcript and determine the goal was completed or not.",
+        },
+        {
+          role: "user",
+          content: JSON.stringify(transcript),
+        },
+      ],
+      response_format: zodResponseFormat(
+        z.enum(["completed", "failed"]),
+        "status"
+      ),
+    });
+
+    const status = statusCompletion.choices[0].message.content
+      ? JSON.parse(statusCompletion.choices[0].message.content).status
+      : "contacted";
+
     // Update call with all information
     const endTime = new Date();
     const duration = endTime.getTime() - call.startTime.getTime();
@@ -138,6 +163,12 @@ export async function PUT(req: NextRequest) {
       },
       { new: true }
     );
+
+    //update target last contact date
+    await Target.findByIdAndUpdate(call.targetId, {
+      lastContact: new Date(),
+      status,
+    });
 
     return NextResponse.json(updatedCall);
   } catch (error) {

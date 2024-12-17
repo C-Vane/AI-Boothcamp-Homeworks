@@ -1,0 +1,81 @@
+import { PromptAgentToolsItem } from "elevenlabs/api";
+
+export const calendarTools: PromptAgentToolsItem[] = [
+  {
+    type: "webhook",
+    name: "get_user_availability",
+    description: "Get the available time slots for a user by their ID",
+    api_schema: {
+      method: "GET",
+      url: "/api/calendar/availability",
+      request_body_schema: {
+        type: "object",
+        properties: {
+          agentId: {
+            type: "string",
+            description: "The Id of the agent who is scheduling the meeting",
+          },
+          startDate: {
+            type: "string",
+            description: "Start date in ISO format (YYYY-MM-DD)",
+          },
+          endDate: {
+            type: "string",
+            description: "End date in ISO format (YYYY-MM-DD)",
+          },
+        },
+        required: ["agentId", "startDate", "endDate"],
+      },
+    },
+  },
+  {
+    type: "webhook",
+    name: "schedule_meeting",
+    description: "Schedule a meeting with a target on the user's calendar",
+    api_schema: {
+      method: "POST",
+      url: "/api/calendar/schedule",
+      request_headers: {
+        "Content-Type": "application/json",
+        secret: {
+          secret_id: "secret_id",
+        },
+      },
+      request_body_schema: {
+        type: "object",
+        properties: {
+          agentId: {
+            type: "string",
+            description: "The ID of the agent who is scheduling the meeting",
+          },
+          targetId: {
+            type: "string",
+            description: "The ID of the target to schedule the meeting with",
+          },
+          targetEmail: {
+            type: "string",
+            description: "The email of the target to schedule the meeting with",
+          },
+          startTime: {
+            type: "string",
+            description:
+              "Meeting start time in ISO format (YYYY-MM-DDTHH:mm:ss.sssZ)",
+          },
+          duration: {
+            type: "number",
+            description: "Duration of the meeting in minutes",
+          },
+          title: {
+            type: "string",
+            description: "Title of the meeting",
+          },
+          description: {
+            type: "string",
+            description: "Description of the meeting",
+          },
+        },
+        required: ["agentId", "targetId", "startTime", "duration", "title"],
+      },
+    },
+  },
+];
