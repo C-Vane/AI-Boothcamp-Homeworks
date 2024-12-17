@@ -4,6 +4,8 @@ import { useState } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import Link from "next/link";
 
 export default function SignIn() {
   const router = useRouter();
@@ -48,32 +50,24 @@ export default function SignIn() {
           </h2>
         </div>
         <form className='mt-8 space-y-6' onSubmit={handleSubmit}>
-          <div className='rounded-md shadow-sm -space-y-px'>
+          <div className='rounded-md shadow-sm space-y-4'>
             <div>
-              <label htmlFor='email' className='sr-only'>
-                Email address
-              </label>
-              <input
+              <Input
                 id='email'
                 name='email'
                 type='email'
                 autoComplete='email'
                 required
-                className='appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm'
                 placeholder='Email address'
               />
             </div>
             <div>
-              <label htmlFor='password' className='sr-only'>
-                Password
-              </label>
-              <input
+              <Input
                 id='password'
                 name='password'
                 type='password'
                 autoComplete='current-password'
                 required
-                className='appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm'
                 placeholder='Password'
               />
             </div>
@@ -87,6 +81,17 @@ export default function SignIn() {
             <Button type='submit' disabled={isLoading}>
               {isLoading ? "Signing in..." : "Sign in"}
             </Button>
+          </div>
+
+          <div className='flex justify-center'>
+            <p className='text-sm text-gray-500'>
+              Don&apos;t have an account?{" "}
+              <Link
+                href='/auth/signup'
+                className='ml-1 font-medium text-cyan-600 hover:text-cyan-500'>
+                Sign up
+              </Link>
+            </p>
           </div>
         </form>
       </div>
