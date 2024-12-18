@@ -45,7 +45,7 @@ export const authOptions: AuthOptions = {
       }
       return token;
     },
-    async session({ session, token }) {
+    async session({ session }) {
       if (session.user) {
         const dbUser = await User.findOne({ email: session.user.email });
         session.user.id = dbUser._id.toString();

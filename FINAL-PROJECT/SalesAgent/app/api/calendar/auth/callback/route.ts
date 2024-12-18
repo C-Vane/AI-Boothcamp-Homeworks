@@ -42,7 +42,7 @@ export async function GET(req: NextRequest) {
     return NextResponse.redirect(
       new URL("/dashboard?success=calendar-connected", req.url)
     );
-  } catch (error) {
+  } catch {
     return NextResponse.redirect(
       new URL("/dashboard?error=google-auth-failed", req.url)
     );

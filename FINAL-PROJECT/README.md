@@ -225,9 +225,9 @@ Targets have calls
 
 ### Google Calendar Integration
 
-[ ] Implement Google Calendar integration for admin
-[ ] Create a tool for the agent to get admin availabilities
-[ ] Create a tool for the agent to book a meeting
+[x] Implement Google Calendar integration for admin
+[x] Create a tool for the agent to get admin availabilities
+[x] Create a tool for the agent to book a meeting
 
 ### Polish & Deployment
 
@@ -258,6 +258,10 @@ MONGODB_URI=your_mongodb_uri
 XI_API_KEY=your_elevenlabs_key
 OPENAI_API_KEY=your_openai_key
 NEXTAUTH_SECRET=your_nextauth_secret
+GOOGLE_CLIENT_ID=your_google_client_id
+GOOGLE_CLIENT_SECRET=your_google_client_secret
+GOOGLE_REDIRECT_URI='http://localhost:3000/api/auth/callback/google' || prod_url + /api/auth/callback/google
+
 ```
 
 4. Run the development server
