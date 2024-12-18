@@ -47,7 +47,10 @@ export const authOptions: AuthOptions = {
     },
     async session({ session, token }) {
       if (session.user) {
-        session.user.id = token.id as string;
+        const dbUser = await User.findOne({ email: session.user.email });
+        session.user.id = dbUser._id.toString();
+        session.user.googleCalendarConnected =
+          dbUser.googleCalendarConnected || false;
       }
       return session;
     },

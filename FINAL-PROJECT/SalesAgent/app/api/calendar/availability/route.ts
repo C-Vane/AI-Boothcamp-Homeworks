@@ -1,27 +1,22 @@
-import { google } from 'googleapis';
-import { NextRequest, NextResponse } from 'next/server';
+import { google } from "googleapis";
+import { NextRequest, NextResponse } from "next/server";
 import dbConnect from "@/lib/db/connect";
 import User from "@/models/User";
 import Agent from "@/models/Agent";
-
-// Configure Google Calendar
-const oauth2Client = new google.auth.OAuth2(
-  process.env.GOOGLE_CLIENT_ID,
-  process.env.GOOGLE_CLIENT_SECRET,
-  'http://localhost:3000/api/auth/callback/google'
-);
-
-const calendar = google.calendar({ version: 'v3', auth: oauth2Client });
+import { getCalendar } from "@/lib/google";
 
 export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
-    const agentId = searchParams.get('agentId');
-    const startDate = searchParams.get('startDate');
-    const endDate = searchParams.get('endDate');
+    const agentId = searchParams.get("agentId");
+    const startDate = searchParams.get("startDate");
+    const endDate = searchParams.get("endDate");
 
     if (!agentId || !startDate || !endDate) {
-      return NextResponse.json({ error: 'Missing required parameters' }, { status: 400 });
+      return NextResponse.json(
+        { error: "Missing required parameters" },
+        { status: 400 }
+      );
     }
 
     await dbConnect();
@@ -29,13 +24,15 @@ export async function GET(req: NextRequest) {
     // Fetch agent and user details
     const agent = await Agent.findById(agentId);
     if (!agent) {
-      return NextResponse.json({ error: 'Agent not found' }, { status: 404 });
+      return NextResponse.json({ error: "Agent not found" }, { status: 404 });
     }
 
     const user = await User.findById(agent.userId);
     if (!user) {
-      return NextResponse.json({ error: 'User not found' }, { status: 404 });
+      return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
+
+    const calendar = await getCalendar(user._id);
 
     // Fetch calendar events
     const response = await calendar.freebusy.query({
@@ -58,7 +55,7 @@ export async function GET(req: NextRequest) {
         const slotStart = new Date(d);
         slotStart.setHours(hour, 0, 0, 0);
 
-        const isSlotBusy = busySlots.some(busy => {
+        const isSlotBusy = busySlots.some((busy) => {
           if (!busy.start || !busy.end) return false;
           const busyStart = new Date(busy.start);
           const busyEnd = new Date(busy.end);
@@ -67,8 +64,8 @@ export async function GET(req: NextRequest) {
 
         if (!isSlotBusy) {
           availableSlots.push({
-            date: slotStart.toISOString().split('T')[0],
-            time: `${hour.toString().padStart(2, '0')}:00:00`,
+            date: slotStart.toISOString().split("T")[0],
+            time: `${hour.toString().padStart(2, "0")}:00:00`,
           });
         }
       }
@@ -76,7 +73,10 @@ export async function GET(req: NextRequest) {
 
     return NextResponse.json({ availableSlots });
   } catch (error) {
-    console.error('Error fetching availability:', error);
-    return NextResponse.json({ error: 'Failed to fetch availability' }, { status: 500 });
+    console.error("Error fetching availability:", error);
+    return NextResponse.json(
+      { error: "Failed to fetch availability" },
+      { status: 500 }
+    );
   }
 }

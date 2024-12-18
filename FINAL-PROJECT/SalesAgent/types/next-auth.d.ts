@@ -8,6 +8,7 @@ declare module "next-auth" {
     user: {
       /** The user's MongoDB ID */
       id: string;
+      googleCalendarConnected: boolean;
     } & DefaultSession["user"];
   }
 }

@@ -6,6 +6,8 @@ import { CallsChart } from "@/components/dashboard/calls-chart";
 import { TargetsProgress } from "@/components/dashboard/targets-progress";
 import { useDashboardData } from "@/hooks/us-dashboard-data";
 import { Skeleton } from "@/components/ui/skeleton";
+import { SettingsSection } from "@/components/dashboard/settings-section";
+import { StatusToast } from "@/components/dashboard/status-toast";
 
 export default function DashboardPage() {
   const { data, loading, error } = useDashboardData();
@@ -42,6 +44,7 @@ export default function DashboardPage() {
 
   return (
     <div className='container mx-auto p-6 space-y-6'>
+      <StatusToast />
       <h1 className='text-3xl font-bold text-gray-100'>Dashboard</h1>
 
       {/* Stats Overview */}
@@ -62,6 +65,9 @@ export default function DashboardPage() {
       {/* Campaigns Grid */}
       <div className='bg-slate/10 backdrop-blur-lg rounded-lg p-6'>
         <CampaignsGrid campaigns={data?.campaigns || []} />
+      </div>
+      <div className='bg-slate/10 backdrop-blur-lg rounded-lg p-6 border border-cyan-400'>
+        <SettingsSection />
       </div>
     </div>
   );
