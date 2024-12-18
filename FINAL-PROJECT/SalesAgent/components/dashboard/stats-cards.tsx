@@ -19,9 +19,9 @@ export function StatsCards({ stats }: StatsCardsProps) {
         icon={<Target className='w-4 h-4' />}
       />
       <StatCard
-        title='Completed'
-        value={stats.completedLeads.current}
-        change={stats.completedLeads.change}
+        title='Closed'
+        value={stats.closedLeads.current}
+        change={stats.closedLeads.change}
         icon={<Phone className='w-4 h-4' />}
       />
       <StatCard

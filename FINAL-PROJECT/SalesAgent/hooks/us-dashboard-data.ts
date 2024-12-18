@@ -4,7 +4,7 @@ export interface IndustryProgress {
   name: string;
   progress: number;
   total: number;
-  completed: number;
+  closed: number;
 }
 
 export interface Stats {
@@ -12,7 +12,7 @@ export interface Stats {
     current: number;
     change: number;
   };
-  completedLeads: {
+  closedLeads: {
     current: number;
     change: number;
   };

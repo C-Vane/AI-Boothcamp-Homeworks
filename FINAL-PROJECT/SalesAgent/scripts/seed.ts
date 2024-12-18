@@ -15,6 +15,7 @@ const industries = [
 ];
 
 const statuses = ["scheduled", "scheduled", "completed", "failed"];
+const leadStatuses = ["new", "contacted", "responded", "scheduled", "closed"];
 const languages = ["en", "es", "fr", "de", "it"] as Language[];
 const personalities = Object.values(Personality);
 
@@ -103,7 +104,9 @@ async function seedDatabase() {
       for (let j = 0; j < leadsCount; j++) {
         const industry =
           industries[Math.floor(Math.random() * industries.length)];
-        const status = statuses[Math.floor(Math.random() * statuses.length)];
+        const leadStatus =
+          leadStatuses[Math.floor(Math.random() * leadStatuses.length)];
+
         const lastContact = await generateRandomDate(sevenDaysAgo, new Date());
 
         const lead = await Lead.create({
@@ -115,10 +118,10 @@ async function seedDatabase() {
           industry,
           phone: `+1${Math.floor(Math.random() * 9000000000) + 1000000000}`,
           email: `contact${j + 1}@company${j + 1}.com`,
-          status,
+          status: leadStatus,
           bestTimeToCall: "9:00-17:00",
           timezone: "UTC",
-          lastContact: status !== "scheduled" ? lastContact : null,
+          lastContact: leadStatus !== "scheduled" ? lastContact : null,
           notes: "Initial contact to be made",
           campaignId: campaign._id,
           agentId: agent._id,
@@ -126,7 +129,7 @@ async function seedDatabase() {
         });
 
         // Generate 1-3 calls for each lead that's not scheduled
-        if (status !== "scheduled") {
+        if (leadStatus !== "scheduled") {
           const numCalls = Math.floor(Math.random() * 3) + 1;
           for (let k = 0; k < numCalls; k++) {
             const callStartTime = await generateRandomDate(
@@ -138,7 +141,8 @@ async function seedDatabase() {
               callStartTime.getTime() + callDuration * 1000
             );
 
-            const callStatus = k === numCalls - 1 ? status : "completed";
+            const callStatus =
+              statuses[Math.floor(Math.random() * statuses.length)];
 
             // Generate a realistic conversation transcript
             const transcript = [

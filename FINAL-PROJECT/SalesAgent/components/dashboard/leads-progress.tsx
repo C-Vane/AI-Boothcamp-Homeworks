@@ -7,7 +7,7 @@ interface LeadsProgressProps {
     name: string;
     progress: number;
     total: number;
-    completed: number;
+    closed: number;
   }[];
 }
 
@@ -25,7 +25,7 @@ export function LeadsProgress({ progress }: LeadsProgressProps) {
                 <div className='flex justify-between text-sm'>
                   <span className='text-gray-200'>{lead.name}</span>
                   <span className='text-gray-200'>
-                    {lead.completed}/{lead.total}
+                    {lead.closed}/{lead.total}
                   </span>
                 </div>
                 <Progress value={lead.progress} className='h-2' />

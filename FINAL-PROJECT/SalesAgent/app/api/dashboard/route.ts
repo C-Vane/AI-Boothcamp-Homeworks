@@ -70,7 +70,7 @@ export async function GET() {
                                       input: "$campaignLeads",
                                       as: "lead",
                                       cond: {
-                                        $eq: ["$$lead.status", "completed"],
+                                        $eq: ["$$lead.status", "closed"],
                                       },
                                     },
                                   },
@@ -119,22 +119,20 @@ export async function GET() {
     const previousLeads = lastWeekLeads.length;
     const leadsChange = ((currentLeads - previousLeads) / previousLeads) * 100;
 
-    const currentCompletedLeads = leads.filter(
-      (lead) => lead.status === "completed"
+    const currentClosedLeads = leads.filter(
+      (lead) => lead.status === "closed"
     ).length;
-    const previousCompletedLeads = lastWeekLeads.filter(
-      (lead) => lead.status === "completed"
+    const previousClosedLeads = lastWeekLeads.filter(
+      (lead) => lead.status === "closed"
     ).length;
-    const completedLeadsChange =
-      ((currentCompletedLeads - previousCompletedLeads) /
-        previousCompletedLeads) *
-      100;
+    const closedLeadsChange =
+      ((currentClosedLeads - previousClosedLeads) / previousClosedLeads) * 100;
 
     const currentPendingLeads = leads.filter(
-      (lead) => lead.status !== "failed" && lead.status !== "completed"
+      (lead) => lead.status !== "failed" && lead.status !== "closed"
     ).length;
     const previousPendingLeads = lastWeekLeads.filter(
-      (lead) => lead.status !== "failed" && lead.status !== "completed"
+      (lead) => lead.status !== "failed" && lead.status !== "closed"
     ).length;
     const pendingLeadsChange =
       ((currentPendingLeads - previousPendingLeads) / previousPendingLeads) *
@@ -142,11 +140,11 @@ export async function GET() {
 
     const currentConversionRate =
       currentLeads > 0
-        ? Math.round((currentCompletedLeads / currentLeads) * 100)
+        ? Math.round((currentClosedLeads / currentLeads) * 100)
         : 0;
     const pastConversionRate =
       previousLeads > 0
-        ? Math.round((previousCompletedLeads / previousLeads) * 100)
+        ? Math.round((previousClosedLeads / previousLeads) * 100)
         : 0;
     const conversionRateChange =
       (currentConversionRate - pastConversionRate) / pastConversionRate;
@@ -156,16 +154,16 @@ export async function GET() {
         if (!acc[lead.industry]) {
           acc[lead.industry] = {
             total: 0,
-            completed: 0,
+            closed: 0,
             name: lead.industry,
             progress: 0,
           };
         }
         acc[lead.industry].total++;
-        if (lead.status === "completed") {
-          acc[lead.industry].completed++;
+        if (lead.status === "closed") {
+          acc[lead.industry].closed++;
           acc[lead.industry].progress = Math.round(
-            (acc[lead.industry].completed / acc[lead.industry].total) * 100
+            (acc[lead.industry].closed / acc[lead.industry].total) * 100
           );
         }
         return acc;
@@ -208,9 +206,9 @@ export async function GET() {
           current: currentLeads,
           change: leadsChange,
         },
-        completedLeads: {
-          current: currentCompletedLeads,
-          change: completedLeadsChange,
+        closedLeads: {
+          current: currentClosedLeads,
+          change: closedLeadsChange,
         },
         pendingLeads: {
           current: currentPendingLeads,

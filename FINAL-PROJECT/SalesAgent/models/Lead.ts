@@ -1,6 +1,14 @@
 import { Language } from "@/types/languages";
 import mongoose, { ObjectId, Schema } from "mongoose";
 
+export enum LeadsEnum {
+  new = "new",
+  contacted = "contacted",
+  responded = "responded",
+  scheduled = "scheduled",
+  closed = "closed",
+  failed = "failed",
+}
 export interface ILead {
   _id: ObjectId;
   name: string;
@@ -14,7 +22,7 @@ export interface ILead {
   notes: string;
   contactInCommon: string;
   lastContact: Date;
-  status: "new" | "contacted" | "responded" | "scheduled" | "closed";
+  status: "new" | "contacted" | "responded" | "scheduled" | "closed" | "failed";
   campaignId: ObjectId;
   agentId: ObjectId;
   createdAt: Date;
@@ -36,7 +44,7 @@ const LeadSchema = new Schema<ILead>(
     lastContact: { type: Date },
     status: {
       type: String,
-      enum: ["new", "contacted", "responded", "scheduled", "closed"],
+      enum: LeadsEnum,
       default: "new",
     },
     campaignId: {
@@ -53,5 +61,5 @@ const LeadSchema = new Schema<ILead>(
   }
 );
 
-export default mongoose.models.Lead ||
+export default mongoose.models?.Lead ||
   mongoose.model<ILead>("Lead", LeadSchema);

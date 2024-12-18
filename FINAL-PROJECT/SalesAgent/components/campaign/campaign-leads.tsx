@@ -25,19 +25,19 @@ import { cn } from "@/lib/utils";
 import { LeadCalls } from "./lead-calls";
 import { CampaignWithRelations } from "@/hooks/use-campaign";
 import { useCampaignLeads } from "@/hooks/use-campaign";
-import { ILead } from "@/models/Lead";
-
-const STATUS_OPTIONS = ["all", "scheduled", "contacted", "completed", "failed"];
+import { ILead, LeadsEnum } from "@/models/Lead";
 
 interface CampaignLeadsProps {
   campaign: CampaignWithRelations;
 }
 
-const statusColors = {
+const statusColors: Record<LeadsEnum, string> = {
+  new: "border-gray-500 text-gray-500",
   scheduled: "border-cyan-700 text-cyan-700",
   contacted: "border-purple-500 text-purple-500",
-  completed: "border-green-500 text-green-500",
+  closed: "border-green-500 text-green-500",
   failed: "border-red-500 text-red-500",
+  responded: "border-amber-500 text-amber-500",
 };
 
 export function CampaignLeads({ campaign }: CampaignLeadsProps) {
@@ -81,7 +81,7 @@ export function CampaignLeads({ campaign }: CampaignLeadsProps) {
             <SelectValue placeholder='Filter by status' />
           </SelectTrigger>
           <SelectContent>
-            {STATUS_OPTIONS.map((statusOption) => (
+            {Object.values(LeadsEnum).map((statusOption) => (
               <SelectItem key={statusOption} value={statusOption}>
                 {statusOption.charAt(0).toUpperCase() + statusOption.slice(1)}
               </SelectItem>

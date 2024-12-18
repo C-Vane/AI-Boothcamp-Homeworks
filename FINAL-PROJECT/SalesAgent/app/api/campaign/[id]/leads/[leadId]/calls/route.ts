@@ -20,8 +20,6 @@ export async function GET(
       .sort({ startTime: -1 })
       .lean();
 
-    console.log(calls);
-
     return NextResponse.json(calls);
   } catch (error) {
     console.error("Error fetching calls:", error);
