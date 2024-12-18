@@ -73,7 +73,7 @@ export function CampaignLeads({ campaign }: CampaignLeadsProps) {
         <Input
           placeholder='Search by name or company...'
           value={search}
-          onChange={(e) => handleSearch(e.lead.value)}
+          onChange={(e) => handleSearch(e.target.value)}
           className='max-w-sm'
         />
         <Select value={status} onValueChange={handleStatusFilter}>
