@@ -31,7 +31,7 @@ export const calendarTools: PromptAgentToolsItem[] = [
   {
     type: "webhook",
     name: "schedule_meeting",
-    description: "Schedule a meeting with a target on the user's calendar",
+    description: "Schedule a meeting with a lead on the user's calendar",
     api_schema: {
       method: "POST",
       url: "/api/calendar/schedule",
@@ -48,13 +48,13 @@ export const calendarTools: PromptAgentToolsItem[] = [
             type: "string",
             description: "The ID of the agent who is scheduling the meeting",
           },
-          targetId: {
+          leadId: {
             type: "string",
-            description: "The ID of the target to schedule the meeting with",
+            description: "The ID of the lead to schedule the meeting with",
           },
-          targetEmail: {
+          leadEmail: {
             type: "string",
-            description: "The email of the target to schedule the meeting with",
+            description: "The email of the lead to schedule the meeting with",
           },
           startTime: {
             type: "string",
@@ -74,7 +74,7 @@ export const calendarTools: PromptAgentToolsItem[] = [
             description: "Description of the meeting",
           },
         },
-        required: ["agentId", "targetId", "startTime", "duration", "title"],
+        required: ["agentId", "leadId", "startTime", "duration", "title"],
       },
     },
   },

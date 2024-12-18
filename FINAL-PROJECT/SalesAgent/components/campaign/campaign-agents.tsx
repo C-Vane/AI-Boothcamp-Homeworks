@@ -109,15 +109,15 @@ export function CampaignAgents({
                       <DropdownMenuContent
                         align='end'
                         className='max-h-36 overflow-scroll'>
-                        {campaign.targets?.map((target) => (
+                        {campaign.leads?.map((lead) => (
                           <DropdownMenuItem
-                            key={target._id.toString()}
+                            key={lead._id.toString()}
                             onClick={() =>
                               router.push(
-                                `/simulation/${agent.agent_id}/${target._id}`
+                                `/simulation/${agent.agent_id}/${lead._id}`
                               )
                             }>
-                            {target.name}
+                            {lead.name}
                           </DropdownMenuItem>
                         ))}
                       </DropdownMenuContent>

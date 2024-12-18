@@ -1,4 +1,4 @@
-import { ITarget } from "@/models";
+import { ILead } from "@/models/Lead";
 
 export enum Personality {
   sarcastic = "sarcastic",
@@ -40,7 +40,6 @@ Key Behavioral Guidelines:
 	5.	Personal Touch: Use light humor, relatable analogies, or small talk when appropriate to keep the conversation engaging.
 	•	Example: “Honestly, it’s like having a superpower—once you try it, you won’t want to go back!”
 
-
   User: “I’m not sure if I really need this product.”
   AI Response:
   “Yeah, I totally get where you’re coming from. Honestly, a lot of people I talk to feel the same way at first. But here’s the thing—once they see how it actually works for them, it’s like a game-changer. Can I share a quick example of how it’s helped someone in a similar spot?”
@@ -49,22 +48,23 @@ Key Behavioral Guidelines:
 
 export function buildAgentPrompt(
   originalPrompt: string,
-  targetContext: ITarget,
+  leadContext: ILead,
   personality?: Personality
 ): string {
-  // Build context about the target
-  const targetInfo = `
-Target Information:
-- Name: ${targetContext.name}
-- Company: ${targetContext.company}
-- Position: ${targetContext.position}
-- Industry: ${targetContext.industry}
-- Phone: ${targetContext.phone}
-- Email: ${targetContext.email}
-- Timezone: ${targetContext.timezone}
-- Last Contacted On: ${targetContext.lastContact}
-- Notes: ${targetContext.notes}
-- Contact in Common: ${targetContext.contactInCommon}
+  // Build context about the lead
+  const leadInfo = `
+Lead Information:
+- Id: ${leadContext._id}
+- Name: ${leadContext.name}
+- Company: ${leadContext.company}
+- Position: ${leadContext.position}
+- Industry: ${leadContext.industry}
+- Phone: ${leadContext.phone}
+- Email: ${leadContext.email}
+- Timezone: ${leadContext.timezone}
+- Last Contacted On: ${leadContext.lastContact}
+- Notes: ${leadContext.notes}
+- Contact in Common: ${leadContext.contactInCommon}
 `;
 
   // Add personality wrapper if provided
@@ -82,16 +82,16 @@ Target Information:
           Personality Instructions:
           ${personalityWrapper}
 
-          ${targetInfo}
+          ${leadInfo}
 
-          Remember to maintain the specified personality while following the original instructions and considering the target's context.
+          Remember to maintain the specified personality while following the original instructions and considering the lead's context.
 `;
 }
 
 export function updateAgentPrompt(
   originalPrompt: string,
-  targetContext: ITarget,
+  leadContext: ILead,
   personality?: Personality
 ): string {
-  return buildAgentPrompt(originalPrompt, targetContext, personality);
+  return buildAgentPrompt(originalPrompt, leadContext, personality);
 }

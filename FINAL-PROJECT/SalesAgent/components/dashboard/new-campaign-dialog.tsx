@@ -83,7 +83,7 @@ export function NewCampaignDialog() {
           <DialogHeader>
             <DialogTitle>Create New Campaign</DialogTitle>
             <DialogDescription>
-              Create a new campaign to manage your sales targets and agents.
+              Create a new campaign to manage your sales leads and agents.
             </DialogDescription>
           </DialogHeader>
           <div className='space-y-2'>

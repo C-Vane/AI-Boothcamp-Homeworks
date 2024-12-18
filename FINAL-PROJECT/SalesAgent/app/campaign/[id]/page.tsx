@@ -1,7 +1,7 @@
 "use client";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { CampaignHeader } from "@/components/campaign/campaign-header";
-import { CampaignTargets } from "@/components/campaign/campaign-targets";
+import { CampaignLeads } from "@/components/campaign/campaign-leads";
 import { CampaignAgents } from "@/components/campaign/campaign-agents";
 import { useCampaign } from "@/hooks/use-campaign";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -33,13 +33,13 @@ export default function CampaignPage() {
       <CampaignHeader campaign={campaign} />
 
       <Tabs
-        defaultValue='targets'
+        defaultValue='leads'
         className='space-y-4 bg-slate/10 backdrop-blur-lg rounded-lg p-6'>
         <TabsList className='bg-gray-950/50'>
           <TabsTrigger
-            value='targets'
+            value='leads'
             className='data-[state=active]:bg-gray-900 data-[state=active]:text-white'>
-            Targets
+            Leads
           </TabsTrigger>
           <TabsTrigger
             value='agents'
@@ -47,8 +47,8 @@ export default function CampaignPage() {
             Agents
           </TabsTrigger>
         </TabsList>
-        <TabsContent value='targets' className='space-y-4'>
-          <CampaignTargets campaign={campaign} />
+        <TabsContent value='leads' className='space-y-4'>
+          <CampaignLeads campaign={campaign} />
         </TabsContent>
         <TabsContent value='agents' className='space-y-4'>
           <CampaignAgents campaign={campaign} />

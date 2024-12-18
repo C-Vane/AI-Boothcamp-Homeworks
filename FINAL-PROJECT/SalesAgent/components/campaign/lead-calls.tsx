@@ -12,9 +12,9 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { CallDetailsDialog } from "./call-details-dialog";
 
-interface TargetCallsProps {
+interface LeadCallsProps {
   campaignId: string;
-  targetId: string;
+  leadId: string;
 }
 
 const statusColors = {
@@ -24,7 +24,7 @@ const statusColors = {
   started: "bg-cyan-700 hover:bg-cyan-800",
 };
 
-export function TargetCalls({ campaignId, targetId }: TargetCallsProps) {
+export function LeadCalls({ campaignId, leadId }: LeadCallsProps) {
   const [calls, setCalls] = useState<ICall[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -32,7 +32,7 @@ export function TargetCalls({ campaignId, targetId }: TargetCallsProps) {
     async function fetchCalls() {
       try {
         const response = await fetch(
-          `/api/campaign/${campaignId}/targets/${targetId}/calls`
+          `/api/campaign/${campaignId}/leads/${leadId}/calls`
         );
         if (!response.ok) throw new Error("Failed to fetch calls");
         const data = await response.json();
@@ -45,14 +45,14 @@ export function TargetCalls({ campaignId, targetId }: TargetCallsProps) {
     }
 
     fetchCalls();
-  }, [campaignId, targetId]);
+  }, [campaignId, leadId]);
 
   if (loading) {
     return <div>Loading calls...</div>;
   }
 
   if (calls.length === 0) {
-    return <div>No calls found for this target.</div>;
+    return <div>No calls found for this lead.</div>;
   }
 
   return (

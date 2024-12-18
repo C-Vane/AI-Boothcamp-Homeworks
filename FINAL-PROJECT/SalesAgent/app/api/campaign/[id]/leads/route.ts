@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import dbConnect from "@/lib/db/connect";
-import Target, { ITarget } from "@/models/Target";
+import Lead, { ILead } from "@/models/Lead";
 import { RootFilterQuery } from "mongoose";
 
 export async function POST(
@@ -28,7 +28,7 @@ export async function POST(
 
     const campaignId = (await params).id;
 
-    const target = await Target.create({
+    const lead = await Lead.create({
       name,
       company,
       position,
@@ -44,21 +44,21 @@ export async function POST(
       agentId,
     });
 
-    if (!target) {
+    if (!lead) {
       return NextResponse.json(
-        { error: "Target creation failed" },
+        { error: "Lead creation failed" },
         { status: 500 }
       );
     }
 
     return NextResponse.json({
-      message: "Target created successfully",
-      target,
+      message: "Lead created successfully",
+      lead,
     });
   } catch (error) {
-    console.error("Error creating target:", error);
+    console.error("Error creating lead:", error);
     return NextResponse.json(
-      { error: "Failed to create target" },
+      { error: "Failed to create lead" },
       { status: 500 }
     );
   }
@@ -79,7 +79,7 @@ export async function GET(
 
     await dbConnect();
 
-    const query: RootFilterQuery<ITarget> = {
+    const query: RootFilterQuery<ILead> = {
       campaignId: campaignId,
     };
 
@@ -95,16 +95,16 @@ export async function GET(
     }
 
     // Get total count for pagination
-    const total = await Target.countDocuments(query);
+    const total = await Lead.countDocuments(query);
 
     // Get paginated results
-    const targets: ITarget[] = await Target.find(query)
+    const leads: ILead[] = await Lead.find(query)
       .skip((page - 1) * limit)
       .limit(limit)
       .sort({ createdAt: -1 });
 
     return NextResponse.json({
-      targets,
+      leads,
       pagination: {
         total,
         pages: Math.ceil(total / limit),
@@ -113,9 +113,9 @@ export async function GET(
       },
     });
   } catch (error) {
-    console.error("Error fetching targets:", error);
+    console.error("Error fetching leads:", error);
     return NextResponse.json(
-      { error: "Failed to fetch targets" },
+      { error: "Failed to fetch leads" },
       { status: 500 }
     );
   }

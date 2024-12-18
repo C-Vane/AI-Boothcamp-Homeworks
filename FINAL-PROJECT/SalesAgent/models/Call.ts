@@ -14,7 +14,7 @@ interface ITodoItem {
 export interface ICall {
   conversationId: string;
   agentId: string;
-  targetId: ObjectId;
+  leadId: ObjectId;
   startTime: Date;
   endTime: Date;
   duration: number;
@@ -28,7 +28,7 @@ const CallSchema = new Schema<ICall>(
   {
     conversationId: { type: String, required: true },
     agentId: { type: String, ref: "Agent", required: true },
-    targetId: { type: Schema.Types.ObjectId, ref: "Target", required: true },
+    leadId: { type: Schema.Types.ObjectId, ref: "Lead", required: true },
     startTime: { type: Date, required: true },
     endTime: { type: Date },
     duration: { type: Number },

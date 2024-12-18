@@ -22,7 +22,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Dialog, DialogTrigger } from "@radix-ui/react-dialog";
 import { ObjectId } from "mongoose";
 
-interface NewTargetDialogProps {
+interface NewLeadDialogProps {
   campaignId: ObjectId;
   agents: Array<{
     agentId: string;
@@ -32,7 +32,7 @@ interface NewTargetDialogProps {
 
 const timeZones = Intl.supportedValuesOf("timeZone");
 
-export function NewTargetDialog({ campaignId, agents }: NewTargetDialogProps) {
+export function NewLeadDialog({ campaignId, agents }: NewLeadDialogProps) {
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
@@ -58,7 +58,7 @@ export function NewTargetDialog({ campaignId, agents }: NewTargetDialogProps) {
     };
 
     try {
-      const response = await fetch(`/api/campaign/${campaignId}/targets`, {
+      const response = await fetch(`/api/campaign/${campaignId}/leads`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -67,18 +67,18 @@ export function NewTargetDialog({ campaignId, agents }: NewTargetDialogProps) {
       });
 
       if (!response.ok) {
-        throw new Error("Failed to create target");
+        throw new Error("Failed to create lead");
       }
 
       toast({
         title: "Success",
-        description: "Target created successfully",
+        description: "Lead created successfully",
       });
       setOpen(false);
     } catch {
       toast({
         title: "Error",
-        description: "Failed to create target",
+        description: "Failed to create lead",
         variant: "destructive",
       });
     } finally {
@@ -89,13 +89,13 @@ export function NewTargetDialog({ campaignId, agents }: NewTargetDialogProps) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button>Add Target</Button>
+        <Button>Add Lead</Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Add New Target</DialogTitle>
+          <DialogTitle>Add New Lead</DialogTitle>
           <DialogDescription>
-            Add a new target to your campaign. Fill in the details below.
+            Add a new lead to your campaign. Fill in the details below.
           </DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit}>
@@ -243,7 +243,7 @@ export function NewTargetDialog({ campaignId, agents }: NewTargetDialogProps) {
           </div>
           <DialogFooter>
             <Button type='submit' disabled={loading}>
-              {loading ? "Adding..." : "Add Target"}
+              {loading ? "Adding..." : "Add Lead"}
             </Button>
           </DialogFooter>
         </form>

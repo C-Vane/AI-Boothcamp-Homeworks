@@ -2,16 +2,16 @@ import { NextRequest, NextResponse } from "next/server";
 import dbConnect from "@/lib/db/connect";
 import User from "@/models/User";
 import Agent from "@/models/Agent";
-import Target from "@/models/Target";
+import Lead from "@/models/Lead";
 import { getCalendar } from "@/lib/google";
 
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { agentId, targetId, date, startTime, endTime, title, description } =
+    const { agentId, leadId, date, startTime, endTime, title, description } =
       body;
 
-    if (!agentId || !targetId || !date || !startTime || !endTime || !title) {
+    if (!agentId || !leadId || !date || !startTime || !endTime || !title) {
       return NextResponse.json(
         { error: "Missing required fields" },
         { status: 400 }
@@ -31,10 +31,10 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
 
-    // Fetch target details
-    const target = await Target.findById(targetId);
-    if (!target) {
-      return NextResponse.json({ error: "Target not found" }, { status: 404 });
+    // Fetch lead details
+    const lead = await Lead.findById(leadId);
+    if (!lead) {
+      return NextResponse.json({ error: "Lead not found" }, { status: 404 });
     }
 
     // Create calendar event
@@ -49,7 +49,7 @@ export async function POST(req: NextRequest) {
         dateTime: `${date}T${endTime}`,
         timeZone: "UTC",
       },
-      attendees: [{ email: user.email }, { email: target.email }],
+      attendees: [{ email: user.email }, { email: lead.email }],
     };
 
     const calendar = await getCalendar(user._id);

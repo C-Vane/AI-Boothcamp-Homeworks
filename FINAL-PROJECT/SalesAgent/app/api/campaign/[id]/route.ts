@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import dbConnect from "@/lib/db/connect";
-import { Agent, Campaign, Target } from "@/models";
+import { Agent, Campaign, Lead } from "@/models";
 import { getServerSession } from "next-auth";
 import mongoose from "mongoose";
 import { initElevenLabsClient } from "@/lib/11labs";
@@ -63,7 +63,7 @@ export async function GET(
       );
     }
 
-    //get campaign with agents and targets
+    //get campaign with agents and leads
     const campaign = await Campaign.findById(campaignId);
 
     const agentIds = await Agent.find({ campaignId: campaignId });
@@ -87,9 +87,9 @@ export async function GET(
       })
     );
 
-    const targets = await Target.find({ campaignId: campaignId });
+    const leads = await Lead.find({ campaignId: campaignId });
 
-    return NextResponse.json({ ...campaign.toObject(), agents, targets });
+    return NextResponse.json({ ...campaign.toObject(), agents, leads });
   } catch (error) {
     console.error("Campaign creation error:", error);
     return NextResponse.json(

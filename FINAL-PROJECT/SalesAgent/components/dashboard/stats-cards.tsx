@@ -13,21 +13,21 @@ export function StatsCards({ stats }: StatsCardsProps) {
   return (
     <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4'>
       <StatCard
-        title='Total Targets'
-        value={stats.totalTargets.current}
-        change={stats.totalTargets.change}
+        title='Total Leads'
+        value={stats.totalLeads.current}
+        change={stats.totalLeads.change}
         icon={<Target className='w-4 h-4' />}
       />
       <StatCard
         title='Completed'
-        value={stats.completedTargets.current}
-        change={stats.completedTargets.change}
+        value={stats.completedLeads.current}
+        change={stats.completedLeads.change}
         icon={<Phone className='w-4 h-4' />}
       />
       <StatCard
         title='Pending'
-        value={stats.pendingTargets.current}
-        change={stats.pendingTargets.change}
+        value={stats.pendingLeads.current}
+        change={stats.pendingLeads.change}
         icon={<Clock className='w-4 h-4' />}
       />
       <StatCard

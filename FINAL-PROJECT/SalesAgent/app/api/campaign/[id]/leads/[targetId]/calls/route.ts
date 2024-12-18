@@ -6,7 +6,7 @@ import { authOptions } from "@/app/api/auth/[...nextauth]/auth";
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: Promise<{ targetId: string }> }
+  { params }: { params: Promise<{ leadId: string }> }
 ) {
   try {
     const session = await getServerSession(authOptions);
@@ -16,7 +16,7 @@ export async function GET(
 
     await dbConnect();
 
-    const calls = await Call.find({ targetId: (await params).targetId })
+    const calls = await Call.find({ leadId: (await params).leadId })
       .sort({ startTime: -1 })
       .lean();
 

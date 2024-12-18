@@ -3,7 +3,7 @@
 import { CampaignsGrid } from "@/components/dashboard/campaigns-grid";
 import { StatsCards } from "@/components/dashboard/stats-cards";
 import { CallsChart } from "@/components/dashboard/calls-chart";
-import { TargetsProgress } from "@/components/dashboard/targets-progress";
+import { LeadsProgress } from "@/components/dashboard/leads-progress";
 import { useDashboardData } from "@/hooks/us-dashboard-data";
 import { Skeleton } from "@/components/ui/skeleton";
 import { SettingsSection } from "@/components/dashboard/settings-section";
@@ -56,9 +56,9 @@ export default function DashboardPage() {
           <CallsChart data={data?.callsData} />
         </div>
 
-        {/* Targets Progress */}
+        {/* Leads Progress */}
         <div className='bg-slate/10 backdrop-blur-lg rounded-lg p-6'>
-          <TargetsProgress progress={data?.industryProgress} />
+          <LeadsProgress progress={data?.industryProgress} />
         </div>
       </div>
 

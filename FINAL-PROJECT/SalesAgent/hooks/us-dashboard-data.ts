@@ -8,15 +8,15 @@ export interface IndustryProgress {
 }
 
 export interface Stats {
-  totalTargets: {
+  totalLeads: {
     current: number;
     change: number;
   };
-  completedTargets: {
+  completedLeads: {
     current: number;
     change: number;
   };
-  pendingTargets: {
+  pendingLeads: {
     current: number;
     change: number;
   };
@@ -29,7 +29,7 @@ export interface Stats {
 export interface Campaign {
   id: string;
   name: string;
-  targets: number;
+  leads: number;
   calls: number;
   conversion: string;
 }

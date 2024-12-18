@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import dbConnect from "@/lib/db/connect";
-import { Target, Campaign, Call } from "@/models";
+import { Lead, Campaign, Call } from "@/models";
 import { getServerSession } from "next-auth";
 
 import mongoose from "mongoose";
@@ -31,17 +31,17 @@ export async function GET() {
       },
       {
         $lookup: {
-          from: "targets",
+          from: "leads",
           localField: "_id",
           foreignField: "campaignId",
-          as: "campaignTargets",
+          as: "campaignLeads",
         },
       },
       {
         $lookup: {
           from: "calls",
-          localField: "campaignTargets._id",
-          foreignField: "targetId",
+          localField: "campaignLeads._id",
+          foreignField: "leadId",
           as: "campaignCalls",
         },
       },
@@ -49,7 +49,7 @@ export async function GET() {
         $project: {
           id: "$_id",
           name: 1,
-          targets: { $size: "$campaignTargets" },
+          leads: { $size: "$campaignLeads" },
           calls: { $size: "$campaignCalls" },
           conversion: {
             $concat: [
@@ -67,15 +67,15 @@ export async function GET() {
                                 {
                                   $size: {
                                     $filter: {
-                                      input: "$campaignTargets",
-                                      as: "target",
+                                      input: "$campaignLeads",
+                                      as: "lead",
                                       cond: {
-                                        $eq: ["$$target.status", "completed"],
+                                        $eq: ["$$lead.status", "completed"],
                                       },
                                     },
                                   },
                                 },
-                                { $size: "$campaignTargets" },
+                                { $size: "$campaignLeads" },
                               ],
                             },
                           ],
@@ -94,20 +94,20 @@ export async function GET() {
       },
     ]);
 
-    // Get all targets for admin's campaigns
+    // Get all leads for admin's campaigns
     const adminCampaigns = await Campaign.find({
       adminId: new mongoose.Types.ObjectId(session.user.id),
     });
 
     const campaignIds = adminCampaigns.map((campaign) => campaign._id);
 
-    const targets = await Target.find({
+    const leads = await Lead.find({
       campaignId: { $in: campaignIds },
     });
 
-    const targetIds = targets.map((target) => target._id);
+    const leadIds = leads.map((lead) => lead._id);
 
-    const lastWeekTargets = await Target.find({
+    const lastWeekLeads = await Lead.find({
       campaignId: { $in: campaignIds },
       lastContact: {
         $gte: new Date(new Date().getTime() - 7 * 24 * 60 * 60 * 1000),
@@ -115,59 +115,57 @@ export async function GET() {
     });
 
     // Calculate stats
-    const currentTargets = targets.length;
-    const previousTargets = lastWeekTargets.length;
-    const targetsChange =
-      ((currentTargets - previousTargets) / previousTargets) * 100;
+    const currentLeads = leads.length;
+    const previousLeads = lastWeekLeads.length;
+    const leadsChange = ((currentLeads - previousLeads) / previousLeads) * 100;
 
-    const currentCompletedTargets = targets.filter(
-      (target) => target.status === "completed"
+    const currentCompletedLeads = leads.filter(
+      (lead) => lead.status === "completed"
     ).length;
-    const previousCompletedTargets = lastWeekTargets.filter(
-      (target) => target.status === "completed"
+    const previousCompletedLeads = lastWeekLeads.filter(
+      (lead) => lead.status === "completed"
     ).length;
-    const completedTargetsChange =
-      ((currentCompletedTargets - previousCompletedTargets) /
-        previousCompletedTargets) *
+    const completedLeadsChange =
+      ((currentCompletedLeads - previousCompletedLeads) /
+        previousCompletedLeads) *
       100;
 
-    const currentPendingTargets = targets.filter(
-      (target) => target.status !== "failed" && target.status !== "completed"
+    const currentPendingLeads = leads.filter(
+      (lead) => lead.status !== "failed" && lead.status !== "completed"
     ).length;
-    const previousPendingTargets = lastWeekTargets.filter(
-      (target) => target.status !== "failed" && target.status !== "completed"
+    const previousPendingLeads = lastWeekLeads.filter(
+      (lead) => lead.status !== "failed" && lead.status !== "completed"
     ).length;
-    const pendingTargetsChange =
-      ((currentPendingTargets - previousPendingTargets) /
-        previousPendingTargets) *
+    const pendingLeadsChange =
+      ((currentPendingLeads - previousPendingLeads) / previousPendingLeads) *
       100;
 
     const currentConversionRate =
-      currentTargets > 0
-        ? Math.round((currentCompletedTargets / currentTargets) * 100)
+      currentLeads > 0
+        ? Math.round((currentCompletedLeads / currentLeads) * 100)
         : 0;
     const pastConversionRate =
-      previousTargets > 0
-        ? Math.round((previousCompletedTargets / previousTargets) * 100)
+      previousLeads > 0
+        ? Math.round((previousCompletedLeads / previousLeads) * 100)
         : 0;
     const conversionRateChange =
       (currentConversionRate - pastConversionRate) / pastConversionRate;
-    // Group targets by industry for progress tracking
-    const targetsByIndustry = targets.reduce<Record<string, IndustryProgress>>(
-      (acc, target) => {
-        if (!acc[target.industry]) {
-          acc[target.industry] = {
+    // Group leads by industry for progress tracking
+    const leadsByIndustry = leads.reduce<Record<string, IndustryProgress>>(
+      (acc, lead) => {
+        if (!acc[lead.industry]) {
+          acc[lead.industry] = {
             total: 0,
             completed: 0,
-            name: target.industry,
+            name: lead.industry,
             progress: 0,
           };
         }
-        acc[target.industry].total++;
-        if (target.status === "completed") {
-          acc[target.industry].completed++;
-          acc[target.industry].progress = Math.round(
-            (acc[target.industry].completed / acc[target.industry].total) * 100
+        acc[lead.industry].total++;
+        if (lead.status === "completed") {
+          acc[lead.industry].completed++;
+          acc[lead.industry].progress = Math.round(
+            (acc[lead.industry].completed / acc[lead.industry].total) * 100
           );
         }
         return acc;
@@ -176,7 +174,7 @@ export async function GET() {
     );
 
     // Calculate industry progress
-    const industryProgress = Object.values(targetsByIndustry);
+    const industryProgress = Object.values(leadsByIndustry);
 
     // Get calls data for the last 7 days
     const threeMonthsAgo = new Date();
@@ -185,7 +183,7 @@ export async function GET() {
     const callsByDay = await Call.aggregate<DailyCallStats>([
       {
         $match: {
-          targetId: { $in: targetIds },
+          leadId: { $in: leadIds },
           startTime: { $gte: threeMonthsAgo },
         },
       },
@@ -206,17 +204,17 @@ export async function GET() {
     // Format data for response
     const dashboardData: DashboardData = {
       stats: {
-        totalTargets: {
-          current: currentTargets,
-          change: targetsChange,
+        totalLeads: {
+          current: currentLeads,
+          change: leadsChange,
         },
-        completedTargets: {
-          current: currentCompletedTargets,
-          change: completedTargetsChange,
+        completedLeads: {
+          current: currentCompletedLeads,
+          change: completedLeadsChange,
         },
-        pendingTargets: {
-          current: currentPendingTargets,
-          change: pendingTargetsChange,
+        pendingLeads: {
+          current: currentPendingLeads,
+          change: pendingLeadsChange,
         },
         conversionRate: {
           current: currentConversionRate,

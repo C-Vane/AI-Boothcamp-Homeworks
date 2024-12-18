@@ -7,7 +7,7 @@ import OpenAI from "openai";
 import { zodResponseFormat } from "openai/helpers/zod";
 import { z } from "zod";
 import { initElevenLabsClient } from "@/lib/11labs";
-import { Target } from "@/models";
+import { Lead } from "@/models";
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
@@ -20,14 +20,14 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const { conversationId, agentId, targetId } = await req.json();
+    const { conversationId, agentId, leadId } = await req.json();
 
     await dbConnect();
 
     const call = await Call.create({
       conversationId,
       agentId,
-      targetId,
+      leadId,
       startTime: new Date(),
       status: "scheduled",
     });
@@ -164,8 +164,8 @@ export async function PUT(req: NextRequest) {
       { new: true }
     );
 
-    //update target last contact date
-    await Target.findByIdAndUpdate(call.targetId, {
+    //update lead last contact date
+    await Lead.findByIdAndUpdate(call.leadId, {
       lastContact: new Date(),
       status,
     });

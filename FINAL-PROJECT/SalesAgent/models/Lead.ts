@@ -1,45 +1,44 @@
 import { Language } from "@/types/languages";
 import mongoose, { ObjectId, Schema } from "mongoose";
 
-export interface ITarget {
+export interface ILead {
   _id: ObjectId;
   name: string;
+  email: string;
+  phone: string;
   company: string;
   position: string;
   industry: string;
-  phone: string;
-  email: string;
-  status: "pending" | "contacted" | "scheduled" | "completed" | "failed";
-  bestTimeToCall: string;
   timezone: string;
-  lastContact: Date;
+  language: Language;
   notes: string;
   contactInCommon: string;
+  lastContact: Date;
+  status: "new" | "contacted" | "responded" | "scheduled" | "closed";
   campaignId: ObjectId;
   agentId: ObjectId;
   createdAt: Date;
   updatedAt: Date;
-  language: Language;
 }
 
-const TargetSchema = new Schema<ITarget>(
+const LeadSchema = new Schema<ILead>(
   {
     name: { type: String, required: true },
+    email: { type: String, required: true },
+    phone: { type: String },
     company: { type: String },
     position: { type: String },
     industry: { type: String },
-    phone: { type: String, required: true },
-    email: { type: String },
-    status: {
-      type: String,
-      enum: ["pending", "contacted", "scheduled", "completed", "failed"],
-      default: "pending",
-    },
-    bestTimeToCall: { type: String },
     timezone: { type: String },
-    lastContact: { type: Date },
+    language: { type: String, default: "en", required: true },
     notes: { type: String },
     contactInCommon: { type: String },
+    lastContact: { type: Date },
+    status: {
+      type: String,
+      enum: ["new", "contacted", "responded", "scheduled", "closed"],
+      default: "new",
+    },
     campaignId: {
       type: Schema.Types.ObjectId,
       ref: "Campaign",
@@ -48,12 +47,11 @@ const TargetSchema = new Schema<ITarget>(
     agentId: { type: String, ref: "Agent" },
     createdAt: { type: Date, default: Date.now },
     updatedAt: { type: Date, default: Date.now },
-    language: { type: String, default: "en", required: true },
   },
   {
     timestamps: true,
   }
 );
 
-export default mongoose.models.Target ||
-  mongoose.model<ITarget>("Target", TargetSchema);
+export default mongoose.models.Lead ||
+  mongoose.model<ILead>("Lead", LeadSchema);

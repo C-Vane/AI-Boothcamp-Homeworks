@@ -1,5 +1,5 @@
 import "dotenv/config";
-import { Target, Campaign, Agent, User, Call } from "../models";
+import { Lead, Campaign, Agent, User, Call } from "../models";
 import dbConnect from "../lib/db/connect";
 import { Personality } from "@/lib/prompts/agentPrompt";
 import { Language } from "@/types/languages";
@@ -29,7 +29,7 @@ async function seedDatabase() {
     await dbConnect();
 
     // Clear existing data
-    await Target.deleteMany({});
+    await Lead.deleteMany({});
     await Campaign.deleteMany({});
     await Agent.deleteMany({});
     await User.deleteMany({});
@@ -91,22 +91,22 @@ async function seedDatabase() {
       })
     );
 
-    // Generate targets and calls for each campaign
+    // Generate leads and calls for each campaign
     const sevenDaysAgo = new Date();
     sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
 
     for (let i = 0; i < campaigns.length; i++) {
       const campaign = campaigns[i];
       const agent = agents[i];
-      const targetsCount = Math.floor(Math.random() * 20) + 10; // 10-30 targets per campaign
+      const leadsCount = Math.floor(Math.random() * 20) + 10; // 10-30 leads per campaign
 
-      for (let j = 0; j < targetsCount; j++) {
+      for (let j = 0; j < leadsCount; j++) {
         const industry =
           industries[Math.floor(Math.random() * industries.length)];
         const status = statuses[Math.floor(Math.random() * statuses.length)];
         const lastContact = await generateRandomDate(sevenDaysAgo, new Date());
 
-        const target = await Target.create({
+        const lead = await Lead.create({
           name: `Contact ${j + 1}`,
           company: `Company ${j + 1}`,
           position: ["CEO", "CTO", "Sales Director", "Manager"][
@@ -125,7 +125,7 @@ async function seedDatabase() {
           language: languages[Math.floor(Math.random() * languages.length)],
         });
 
-        // Generate 1-3 calls for each target that's not scheduled
+        // Generate 1-3 calls for each lead that's not scheduled
         if (status !== "scheduled") {
           const numCalls = Math.floor(Math.random() * 3) + 1;
           for (let k = 0; k < numCalls; k++) {
@@ -149,7 +149,7 @@ async function seedDatabase() {
               },
               {
                 timestamp: new Date(callStartTime.getTime() + 5000),
-                speaker: target.name,
+                speaker: lead.name,
                 text: "I'm doing well, thank you. What can I help you with?",
               },
               {
@@ -176,7 +176,7 @@ async function seedDatabase() {
             await Call.create({
               conversationId: "9kXbhoBJlYQQDActat8E",
               agentId: agent.agentId,
-              targetId: target._id,
+              leadId: lead._id,
               startTime: callStartTime,
               endTime: callEndTime,
               duration: callDuration,

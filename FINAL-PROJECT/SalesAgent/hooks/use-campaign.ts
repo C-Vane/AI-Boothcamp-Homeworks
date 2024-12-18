@@ -4,13 +4,13 @@ import { useEffect, useState } from "react";
 
 import { ICampaign } from "@/models/Campaign";
 import { IAgent } from "@/models/Agent";
-import { ITarget } from "@/models/Target";
+import { ILead } from "@/models/Lead";
 import { GetAgentResponseModel } from "elevenlabs/api";
 import { ObjectId } from "mongoose";
 
 export interface CampaignWithRelations extends ICampaign {
   agents?: Array<IAgent & GetAgentResponseModel>;
-  targets?: ITarget[];
+  leads?: ILead[];
 }
 
 export interface PaginationState {
@@ -53,8 +53,8 @@ export const useCampaign = (campaignId: string) => {
   };
 };
 
-export function useCampaignTargets(campaignId: ObjectId) {
-  const [targets, setTargets] = useState<ITarget[]>([]);
+export function useCampaignLeads(campaignId: ObjectId) {
+  const [leads, setLeads] = useState<ILead[]>([]);
   const [pagination, setPagination] = useState<PaginationState>({
     total: 0,
     pages: 0,
@@ -67,7 +67,7 @@ export function useCampaignTargets(campaignId: ObjectId) {
   const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
-    const fetchTargets = async () => {
+    const fetchLeads = async () => {
       try {
         setIsLoading(true);
         const queryParams = new URLSearchParams({
@@ -78,15 +78,15 @@ export function useCampaignTargets(campaignId: ObjectId) {
         });
 
         const response = await fetch(
-          `/api/campaign/${campaignId}/targets?${queryParams}`
+          `/api/campaign/${campaignId}/leads?${queryParams}`
         );
 
         if (!response.ok) {
-          throw new Error("Failed to fetch targets");
+          throw new Error("Failed to fetch leads");
         }
 
         const data = await response.json();
-        setTargets(data.targets);
+        setLeads(data.leads);
         setPagination(data.pagination);
       } catch (err) {
         setError(err instanceof Error ? err : new Error("An error occurred"));
@@ -95,7 +95,7 @@ export function useCampaignTargets(campaignId: ObjectId) {
       }
     };
 
-    fetchTargets();
+    fetchLeads();
   }, [campaignId, pagination.page, pagination.limit, search, status]);
 
   const setPage = (page: number) => {
@@ -117,7 +117,7 @@ export function useCampaignTargets(campaignId: ObjectId) {
   };
 
   return {
-    targets,
+    leads,
     pagination,
     isLoading,
     error,

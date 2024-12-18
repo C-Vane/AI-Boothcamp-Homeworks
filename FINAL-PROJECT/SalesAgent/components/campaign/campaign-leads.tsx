@@ -18,18 +18,18 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { NewTargetDialog } from "./new-target-dialog";
+import { NewLeadDialog } from "./new-lead-dialog";
 import { Badge } from "@/components/ui/badge";
 import { Pencil, Trash2 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { TargetCalls } from "./target-calls";
+import { LeadCalls } from "./lead-calls";
 import { CampaignWithRelations } from "@/hooks/use-campaign";
-import { useCampaignTargets } from "@/hooks/use-campaign";
-import { ITarget } from "@/models/Target";
+import { useCampaignLeads } from "@/hooks/use-campaign";
+import { ILead } from "@/models/Lead";
 
 const STATUS_OPTIONS = ["all", "scheduled", "contacted", "completed", "failed"];
 
-interface CampaignTargetsProps {
+interface CampaignLeadsProps {
   campaign: CampaignWithRelations;
 }
 
@@ -40,9 +40,9 @@ const statusColors = {
   failed: "border-red-500 text-red-500",
 };
 
-export function CampaignTargets({ campaign }: CampaignTargetsProps) {
+export function CampaignLeads({ campaign }: CampaignLeadsProps) {
   const {
-    targets,
+    leads,
     pagination,
     isLoading,
     error,
@@ -51,19 +51,19 @@ export function CampaignTargets({ campaign }: CampaignTargetsProps) {
     handleStatusFilter,
     search,
     status,
-  } = useCampaignTargets(campaign._id);
+  } = useCampaignLeads(campaign._id);
 
-  const [selectedTargetId, setSelectedTargetId] = useState<string | null>(null);
+  const [selectedLeadId, setSelectedLeadId] = useState<string | null>(null);
 
   if (error) {
-    return <div>Error loading targets: {error.message}</div>;
+    return <div>Error loading leads: {error.message}</div>;
   }
 
   return (
     <div className='space-y-4'>
       <div className='flex justify-between'>
-        <h3 className='text-lg font-medium'>Targets</h3>
-        <NewTargetDialog
+        <h3 className='text-lg font-medium'>Leads</h3>
+        <NewLeadDialog
           campaignId={campaign._id}
           agents={campaign.agents || []}
         />
@@ -73,7 +73,7 @@ export function CampaignTargets({ campaign }: CampaignTargetsProps) {
         <Input
           placeholder='Search by name or company...'
           value={search}
-          onChange={(e) => handleSearch(e.target.value)}
+          onChange={(e) => handleSearch(e.lead.value)}
           className='max-w-sm'
         />
         <Select value={status} onValueChange={handleStatusFilter}>
@@ -109,41 +109,39 @@ export function CampaignTargets({ campaign }: CampaignTargetsProps) {
                   Loading...
                 </TableCell>
               </TableRow>
-            ) : !targets?.length ? (
+            ) : !leads?.length ? (
               <TableRow>
                 <TableCell colSpan={6} className='h-24 text-center'>
-                  No targets found.
+                  No leads found.
                 </TableCell>
               </TableRow>
             ) : (
-              targets.map((target: ITarget) => (
-                <Fragment key={target._id.toString()}>
+              leads.map((lead: ILead) => (
+                <Fragment key={lead._id.toString()}>
                   <TableRow
                     onClick={() =>
-                      selectedTargetId === target._id.toString()
-                        ? setSelectedTargetId(null)
-                        : setSelectedTargetId(target._id.toString())
+                      selectedLeadId === lead._id.toString()
+                        ? setSelectedLeadId(null)
+                        : setSelectedLeadId(lead._id.toString())
                     }
                     className='cursor-pointer'>
-                    <TableCell className='font-medium'>{target.name}</TableCell>
-                    <TableCell>{target.company}</TableCell>
-                    <TableCell>{target.position}</TableCell>
+                    <TableCell className='font-medium'>{lead.name}</TableCell>
+                    <TableCell>{lead.company}</TableCell>
+                    <TableCell>{lead.position}</TableCell>
                     <TableCell>
                       <Badge
                         variant='outline'
                         className={cn(
                           "capitalize",
-                          statusColors[
-                            target.status as keyof typeof statusColors
-                          ]
+                          statusColors[lead.status as keyof typeof statusColors]
                         )}>
-                        {target.status}
+                        {lead.status}
                       </Badge>
                     </TableCell>
                     <TableCell>
-                      {target.email}
+                      {lead.email}
                       <br />
-                      {target.phone}
+                      {lead.phone}
                     </TableCell>
                     <TableCell className='text-right'>
                       <div className='flex justify-end gap-2'>
@@ -168,13 +166,13 @@ export function CampaignTargets({ campaign }: CampaignTargetsProps) {
                       </div>
                     </TableCell>
                   </TableRow>
-                  {selectedTargetId === target._id.toString() && (
+                  {selectedLeadId === lead._id.toString() && (
                     <TableRow>
                       <TableCell
                         colSpan={6}
                         className='p-4 bg-slate-50 dark:bg-slate-900'>
-                        <TargetCalls
-                          targetId={target._id.toString()}
+                        <LeadCalls
+                          leadId={lead._id.toString()}
                           campaignId={campaign._id.toString()}
                         />
                       </TableCell>

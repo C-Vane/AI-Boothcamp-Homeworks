@@ -34,8 +34,8 @@ export function CampaignsGrid({ campaigns }: CampaignsGridProps) {
               <div className='grid grid-cols-3 gap-4'>
                 <Stat
                   icon={<Users className='w-4 h-4' />}
-                  label='Targets'
-                  value={campaign.targets}
+                  label='Leads'
+                  value={campaign.leads}
                 />
                 <Stat
                   icon={<Phone className='w-4 h-4' />}

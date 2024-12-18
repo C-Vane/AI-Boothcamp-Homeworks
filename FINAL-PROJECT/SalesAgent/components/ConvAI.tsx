@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/card";
 import { Conversation } from "@11labs/client";
 import { cn } from "@/lib/utils";
-import { IAgent, ITarget } from "@/models";
+import { IAgent, ILead } from "@/models";
 import { useToast } from "@/hooks/use-toast";
 import { ObjectId } from "mongoose";
 import { GetAgentResponseModel } from "elevenlabs/api";
@@ -38,20 +38,20 @@ async function getSignedUrl(agentId: string): Promise<string> {
 async function saveConversationId(
   agentId: string,
   conversationId: string,
-  targetId: ObjectId,
-  campaignId: ObjectId
+  leadId: ObjectId,
+  projectId: ObjectId
 ) {
-  await fetch(`/api/campaign/${campaignId}/calls`, {
+  await fetch(`/api/projects/${projectId}/calls`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ conversationId, agentId, targetId: targetId }),
+    body: JSON.stringify({ conversationId, agentId, leadId: leadId }),
   });
 }
 
-async function callEnded(conversationId: string, campaignId: ObjectId) {
-  await fetch(`/api/campaign/${campaignId}/calls`, {
+async function callEnded(conversationId: string, projectId: ObjectId) {
+  await fetch(`/api/projects/${projectId}/calls`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
@@ -62,11 +62,11 @@ async function callEnded(conversationId: string, campaignId: ObjectId) {
 
 export function ConvAI({
   agentId,
-  target,
+  lead,
   agent,
 }: {
   agentId: string;
-  target: ITarget;
+  lead: ILead;
   agent: IAgent & GetAgentResponseModel & { prompt: string };
 }) {
   const { toast } = useToast();
@@ -88,6 +88,8 @@ export function ConvAI({
 
       const signedUrl = await getSignedUrl(agentId);
 
+      console.log("Signed URL:", signedUrl);
+
       const conversation = await Conversation.startSession({
         signedUrl: signedUrl,
         overrides: {
@@ -95,7 +97,7 @@ export function ConvAI({
             prompt: {
               prompt: agent.prompt,
             },
-            language: target.language || "en",
+            language: lead.language || "en",
           },
         },
         onConnect: () => {
@@ -120,12 +122,7 @@ export function ConvAI({
 
       const conversationId = conversation.getId();
 
-      saveConversationId(
-        agentId,
-        conversationId,
-        target._id,
-        target.campaignId
-      );
+      saveConversationId(agentId, conversationId, lead._id, lead.campaignId);
 
       setConversation(conversation);
     } catch {
@@ -139,9 +136,10 @@ export function ConvAI({
 
   async function endConversation() {
     if (conversation) {
+      callEnded(conversation.getId(), lead.campaignId);
+
       await conversation.endSession();
 
-      callEnded(conversation.getId(), target.campaignId);
       setConversation(null);
     }
   }
@@ -159,7 +157,7 @@ export function ConvAI({
                 : "Disconnected"}
             </CardTitle>
             <CardDescription className={"text-center"}>
-              Target: {target.name}
+              Target: {lead.name}
             </CardDescription>
           </CardHeader>
           <div className={"flex flex-col gap-y-4 text-center"}>

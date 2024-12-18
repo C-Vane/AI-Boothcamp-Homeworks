@@ -1,24 +1,26 @@
-import { withAuth } from "next-auth/middleware";
 import { NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
+import { getToken } from "next-auth/jwt";
 
-export default withAuth(
-  function middleware(req) {
-    // Add custom middleware logic here if needed
-    return NextResponse.next();
-  },
-  {
-    callbacks: {
-      authorized: ({ token }) => !!token,
-    },
+export async function middleware(request: NextRequest) {
+  const token = await getToken({ req: request });
+
+  if (!token) {
+    if (request.nextUrl.pathname.startsWith("/api")) {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+    return NextResponse.redirect(new URL("/auth/signin", request.url));
   }
-);
+
+  return NextResponse.next();
+}
 
 export const config = {
   matcher: [
     "/dashboard/:path*",
     "/api/campaign/:path*",
     "/api/agents/:path*",
-    "/api/targets/:path*",
+    "/api/leads/:path*",
     "/api/calls/:path*",
   ],
 };
