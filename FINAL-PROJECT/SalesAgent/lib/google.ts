@@ -26,21 +26,25 @@ export const getCalendar = async (userId: ObjectId) => {
 
   const oauth2Client = getOauth2Client();
 
-  const { tokens } = await oauth2Client.getToken(refresh_token);
+  console.log("refresh_token", refresh_token, "access_token", access_token);
 
-  if (!tokens || !tokens.access_token || !tokens.refresh_token) {
-    throw new Error("Google access token or refresh token not found");
-  }
+  // const { tokens } = await oauth2Client.getToken(refresh_token);
+
+  // console.log(tokens);
+
+  // if (!tokens || !tokens.access_token || !tokens.refresh_token) {
+  //   throw new Error("Google access token or refresh token not found");
+  // }
   // Configure Google Calendar
 
-  oauth2Client.setCredentials({ access_token: tokens.access_token });
+  oauth2Client.setCredentials({ access_token: access_token });
 
   calendar = google.calendar({ version: "v3", auth: oauth2Client });
 
-  await User.findByIdAndUpdate(userId, {
-    googleAccessToken: tokens.access_token,
-    googleRefreshToken: tokens.refresh_token,
-  });
+  // await User.findByIdAndUpdate(userId, {
+  //   googleAccessToken: tokens.access_token,
+  //   googleRefreshToken: tokens.refresh_token,
+  // });
 
   return calendar;
 };

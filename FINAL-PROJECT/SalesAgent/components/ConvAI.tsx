@@ -126,10 +126,6 @@ export function ConvAI({
 
       const signedUrl = await getSignedUrl(agentId);
 
-      console.log({
-        agent,
-      });
-
       const conversation = await Conversation.startSession({
         signedUrl: signedUrl,
         overrides: {
@@ -167,8 +163,6 @@ export function ConvAI({
           endCall: () => endConversation(),
         },
       });
-
-      console.log(conversation);
 
       const conversationId = conversation.getId();
 

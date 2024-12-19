@@ -17,7 +17,7 @@ export async function POST(req: NextRequest) {
     const title = searchParams.get("title");
     const description = searchParams.get("description");
 
-    if (!campaignId || !leadId || !date || !startTime || !endTime || !title) {
+    if (!campaignId || !leadId || !startTime || !endTime || !title) {
       return NextResponse.json(
         { error: "Missing required fields" },
         { status: 400 }
@@ -35,7 +35,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const user = await User.findById(campaign.userId);
+    const user = await User.findById(campaign.adminId);
     if (!user) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }

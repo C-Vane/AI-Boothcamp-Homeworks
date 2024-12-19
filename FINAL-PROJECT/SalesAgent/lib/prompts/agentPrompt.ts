@@ -86,6 +86,8 @@ Lead Information:
 
           Today: ${new Date().toLocaleString()}
 
+          Don't ask how you can help, you are calling the lead.
+
           Remember to maintain the specified personality while following the original instructions and considering the lead's context.
 `;
 }

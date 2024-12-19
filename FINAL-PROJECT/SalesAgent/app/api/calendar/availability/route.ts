@@ -21,7 +21,7 @@ export async function GET(req: NextRequest) {
     await dbConnect();
 
     // Fetch agent and user details
-    const campaign = await Campaign.findOne({ campaignId });
+    const campaign = await Campaign.findById(campaignId);
     if (!campaign) {
       return NextResponse.json(
         { error: "Campaign not found" },
@@ -29,7 +29,7 @@ export async function GET(req: NextRequest) {
       );
     }
 
-    const user = await User.findById(campaign.userId);
+    const user = await User.findById(campaign.adminId);
     if (!user) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }

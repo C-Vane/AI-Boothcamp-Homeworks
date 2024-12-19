@@ -36,12 +36,16 @@ export const calendarTools: PromptAgentToolsItem[] = [
           type: "string",
           description: "The email of the lead to schedule the meeting with",
         },
+        date: {
+          type: "string",
+          description: "The date of the meeting in ISO format (YYYY-MM-DD)",
+        },
         startTime: {
           type: "string",
           description:
             "Meeting start time in ISO format (YYYY-MM-DDTHH:mm:ss.sssZ)",
         },
-        duration: {
+        endTime: {
           type: "number",
           description: "Duration of the meeting in minutes",
         },
@@ -54,7 +58,7 @@ export const calendarTools: PromptAgentToolsItem[] = [
           description: "Description of the meeting",
         },
       },
-      required: ["leadId", "startTime", "duration", "title"],
+      required: ["date", "leadId", "startTime", "endTime", "title"],
     },
     expects_response: true,
   },
