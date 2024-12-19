@@ -7,15 +7,8 @@ import { Campaign } from "@/models";
 
 export async function POST(req: NextRequest) {
   try {
-    const { searchParams } = new URL(req.url);
-
-    const campaignId = searchParams.get("campaignId");
-    const leadId = searchParams.get("leadId");
-    const date = searchParams.get("date");
-    const startTime = searchParams.get("startTime");
-    const endTime = searchParams.get("endTime");
-    const title = searchParams.get("title");
-    const description = searchParams.get("description");
+    const { campaignId, leadId, startTime, endTime, title, description } =
+      await req.json();
 
     if (!campaignId || !leadId || !startTime || !endTime || !title) {
       return NextResponse.json(
@@ -51,11 +44,11 @@ export async function POST(req: NextRequest) {
       summary: title,
       description,
       start: {
-        dateTime: `${date}T${startTime}`,
+        dateTime: startTime,
         timeZone: "UTC",
       },
       end: {
-        dateTime: `${date}T${endTime}`,
+        dateTime: endTime,
         timeZone: "UTC",
       },
       attendees: [{ email: user.email }, { email: lead.email }],

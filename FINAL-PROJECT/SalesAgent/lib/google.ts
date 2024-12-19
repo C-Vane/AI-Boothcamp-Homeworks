@@ -26,8 +26,6 @@ export const getCalendar = async (userId: ObjectId) => {
 
   const oauth2Client = getOauth2Client();
 
-  console.log("refresh_token", refresh_token, "access_token", access_token);
-
   // const { tokens } = await oauth2Client.getToken(refresh_token);
 
   // console.log(tokens);
