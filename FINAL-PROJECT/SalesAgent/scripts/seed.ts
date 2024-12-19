@@ -70,9 +70,9 @@ async function seedDatabase() {
     ]);
 
     const agentIds = [
-      "oDFg5gmdDaDSB7m3iNcz",
-      "mAqBdobfGNNYnyTGZRFa",
-      "6zAXNr0xfisy4Le4o0NA",
+      "ykX4uSyY6CoHazBePp5V",
+      "8LadIUefBWbMcRgj1gc8",
+      "0vDFO5wTkXI72jr6dAIM",
     ];
 
     // Create agents for each campaign

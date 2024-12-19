@@ -55,7 +55,7 @@ export const calendarTools: PromptAgentToolsItem[] = [
           description: "Description of the meeting",
         },
       },
-      required: ["date", "leadId", "startTime", "endTime", "title"],
+      required: ["leadId", "startTime", "endTime", "title"],
     },
     expects_response: true,
   },
