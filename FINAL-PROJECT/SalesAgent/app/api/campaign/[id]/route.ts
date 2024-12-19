@@ -82,6 +82,7 @@ export async function GET(
           agent.agentId
         );
         return {
+          agentId: agent.agentId,
           ...agentDetails,
         };
       })

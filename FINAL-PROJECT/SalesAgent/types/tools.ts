@@ -4,7 +4,7 @@ export const calendarTools: PromptAgentToolsItem[] = [
   {
     type: "webhook",
     name: "get_user_availability",
-    description: "Get the available time slots for a user by their ID",
+    description: "Get the available time slots for a user by agent Id",
     api_schema: {
       method: "GET",
       url: "https://sales-agent-sigma.vercel.app/api/calendar/availability",
@@ -36,9 +36,6 @@ export const calendarTools: PromptAgentToolsItem[] = [
       url: "https://sales-agent-sigma.vercel.app/api/calendar/schedule",
       request_headers: {
         "Content-Type": "application/json",
-        secret: {
-          secret_id: "secret_id",
-        },
       },
       request_body_schema: {
         type: "object",

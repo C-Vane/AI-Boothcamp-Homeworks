@@ -70,7 +70,7 @@ Lead Information:
   // Add personality wrapper if provided
   const personalityWrapper = personality
     ? PersonalityPrompts[personality]
-    : PersonalityPrompts[Personality.empathetic];
+    : PersonalityPrompts[Personality.highEnergy];
 
   // Combine all components
   return `

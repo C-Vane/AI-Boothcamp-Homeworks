@@ -66,27 +66,31 @@ export async function POST(
     const documents = formData.getAll("documents");
     const resources: string[] = [];
 
-    // Upload files
-    for (const document of documents) {
-      const result = await client.conversationalAi.addToAgentKnowledgeBase(
-        newAgent.agent_id,
-        {
-          file: document as File,
-        }
-      );
-      resources.push(result.id);
-    }
+    try {
+      // Upload files
+      for (const document of documents) {
+        const result = await client.conversationalAi.addToAgentKnowledgeBase(
+          newAgent.agent_id,
+          {
+            file: document as File,
+          }
+        );
+        resources.push(result.id);
+      }
 
-    // Process links
-    const links = String(formData.get("links")).split(" ").filter(Boolean);
-    for (const link of links) {
-      const result = await client.conversationalAi.addToAgentKnowledgeBase(
-        newAgent.agent_id,
-        {
-          url: link,
-        }
-      );
-      resources.push(result.id);
+      // Process links
+      const links = String(formData.get("links")).split(" ").filter(Boolean);
+      for (const link of links) {
+        const result = await client.conversationalAi.addToAgentKnowledgeBase(
+          newAgent.agent_id,
+          {
+            url: link,
+          }
+        );
+        resources.push(result.id);
+      }
+    } catch (error) {
+      console.error("Error processing documents:", error);
     }
 
     // Create agent record in database
