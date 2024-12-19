@@ -7,9 +7,8 @@ export const calendarTools: PromptAgentToolsItem[] = [
     description: "Get the available time slots for a user by their ID",
     api_schema: {
       method: "GET",
-      url: "/api/calendar/availability",
-      request_body_schema: {
-        type: "object",
+      url: "https://sales-agent-sigma.vercel.app/api/calendar/availability",
+      query_params_schema: {
         properties: {
           agentId: {
             type: "string",
@@ -34,7 +33,7 @@ export const calendarTools: PromptAgentToolsItem[] = [
     description: "Schedule a meeting with a lead on the user's calendar",
     api_schema: {
       method: "POST",
-      url: "/api/calendar/schedule",
+      url: "https://sales-agent-sigma.vercel.app/api/calendar/schedule",
       request_headers: {
         "Content-Type": "application/json",
         secret: {

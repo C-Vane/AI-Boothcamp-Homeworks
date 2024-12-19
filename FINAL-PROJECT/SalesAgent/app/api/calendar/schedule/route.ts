@@ -7,9 +7,15 @@ import { getCalendar } from "@/lib/google";
 
 export async function POST(req: NextRequest) {
   try {
-    const body = await req.json();
-    const { agentId, leadId, date, startTime, endTime, title, description } =
-      body;
+    const { searchParams } = new URL(req.url);
+
+    const agentId = searchParams.get("agentId");
+    const leadId = searchParams.get("leadId");
+    const date = searchParams.get("date");
+    const startTime = searchParams.get("startTime");
+    const endTime = searchParams.get("endTime");
+    const title = searchParams.get("title");
+    const description = searchParams.get("description");
 
     if (!agentId || !leadId || !date || !startTime || !endTime || !title) {
       return NextResponse.json(

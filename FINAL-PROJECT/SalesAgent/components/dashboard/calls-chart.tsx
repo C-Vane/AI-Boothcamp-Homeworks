@@ -70,13 +70,13 @@ export function CallsChart({ data }: CallsChartProps) {
     labels: data.labels,
     datasets: [
       {
-        label: "Outbound Calls",
+        label: "Total Calls",
         data: data.datasets[0].data,
         borderColor: "rgb(14, 116, 144)", // cyan-700
         backgroundColor: "rgba(14, 116, 144, 0.5)",
       },
       {
-        label: "Inbound Calls",
+        label: "Successful Calls",
         data: data.datasets[1].data,
         borderColor: "rgb(4, 120, 87)", // emerald-700
         backgroundColor: "rgba(4, 120, 87, 0.5)",

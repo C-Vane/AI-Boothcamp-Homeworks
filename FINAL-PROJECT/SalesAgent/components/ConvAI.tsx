@@ -41,7 +41,7 @@ async function saveConversationId(
   leadId: ObjectId,
   projectId: ObjectId
 ) {
-  await fetch(`/api/projects/${projectId}/calls`, {
+  await fetch(`/api/campaign/${projectId}/calls`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -51,7 +51,7 @@ async function saveConversationId(
 }
 
 async function callEnded(conversationId: string, projectId: ObjectId) {
-  await fetch(`/api/projects/${projectId}/calls`, {
+  await fetch(`/api/campaign/${projectId}/calls`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
