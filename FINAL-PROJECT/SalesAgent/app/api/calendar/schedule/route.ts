@@ -1,15 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
 import dbConnect from "@/lib/db/connect";
 import User from "@/models/User";
-import Agent from "@/models/Agent";
 import Lead from "@/models/Lead";
 import { getCalendar } from "@/lib/google";
+import { Campaign } from "@/models";
 
 export async function POST(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
 
-    const agentId = searchParams.get("agentId");
+    const campaignId = searchParams.get("campaignId");
     const leadId = searchParams.get("leadId");
     const date = searchParams.get("date");
     const startTime = searchParams.get("startTime");
@@ -17,7 +17,7 @@ export async function POST(req: NextRequest) {
     const title = searchParams.get("title");
     const description = searchParams.get("description");
 
-    if (!agentId || !leadId || !date || !startTime || !endTime || !title) {
+    if (!campaignId || !leadId || !date || !startTime || !endTime || !title) {
       return NextResponse.json(
         { error: "Missing required fields" },
         { status: 400 }
@@ -26,13 +26,16 @@ export async function POST(req: NextRequest) {
 
     await dbConnect();
 
-    // Fetch agent and user details
-    const agent = await Agent.findById(agentId);
-    if (!agent) {
-      return NextResponse.json({ error: "Agent not found" }, { status: 404 });
+    // Fetch campaign and user details
+    const campaign = await Campaign.findById(campaignId);
+    if (!campaign) {
+      return NextResponse.json(
+        { error: "Campaign not found" },
+        { status: 404 }
+      );
     }
 
-    const user = await User.findById(agent.userId);
+    const user = await User.findById(campaign.userId);
     if (!user) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }

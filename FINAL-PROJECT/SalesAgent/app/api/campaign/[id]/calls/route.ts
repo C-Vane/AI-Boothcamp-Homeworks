@@ -132,7 +132,7 @@ export async function PUT(req: NextRequest) {
         },
       ],
       response_format: zodResponseFormat(
-        z.enum(["completed", "failed"]),
+        z.object({ status: z.enum(["completed", "failed"]) }),
         "status"
       ),
     });

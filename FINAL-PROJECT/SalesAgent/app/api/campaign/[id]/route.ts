@@ -77,15 +77,24 @@ export async function GET(
 
     // Get agent details from 11Labs
     const agents = await Promise.all(
-      agentIds.map(async (agent: { agentId: string }) => {
-        const agentDetails = await client.conversationalAi.getAgent(
-          agent.agentId
-        );
-        return {
-          agentId: agent.agentId,
-          ...agentDetails,
-        };
-      })
+      agentIds
+        .map(async (agent: { agentId: string }) => {
+          try {
+            const agentDetails = await client.conversationalAi.getAgent(
+              agent.agentId
+            );
+
+            if (agentDetails) {
+              return {
+                agentId: agent.agentId,
+                ...agentDetails,
+              };
+            }
+          } catch (error) {
+            console.error("Error fetching agent details:", error);
+          }
+        })
+        .filter((a) => a)
     );
 
     const leads = await Lead.find({ campaignId: campaignId });

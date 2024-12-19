@@ -1,17 +1,17 @@
 import { NextRequest, NextResponse } from "next/server";
 import dbConnect from "@/lib/db/connect";
 import User from "@/models/User";
-import Agent from "@/models/Agent";
 import { getCalendar } from "@/lib/google";
+import { Campaign } from "@/models";
 
 export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
-    const agentId = searchParams.get("agentId");
+    const campaignId = searchParams.get("campaignId");
     const startDate = searchParams.get("startDate");
     const endDate = searchParams.get("endDate");
 
-    if (!agentId || !startDate || !endDate) {
+    if (!campaignId || !startDate || !endDate) {
       return NextResponse.json(
         { error: "Missing required parameters" },
         { status: 400 }
@@ -21,12 +21,15 @@ export async function GET(req: NextRequest) {
     await dbConnect();
 
     // Fetch agent and user details
-    const agent = await Agent.findById(agentId);
-    if (!agent) {
-      return NextResponse.json({ error: "Agent not found" }, { status: 404 });
+    const campaign = await Campaign.findOne({ campaignId });
+    if (!campaign) {
+      return NextResponse.json(
+        { error: "Campaign not found" },
+        { status: 404 }
+      );
     }
 
-    const user = await User.findById(agent.userId);
+    const user = await User.findById(campaign.userId);
     if (!user) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }

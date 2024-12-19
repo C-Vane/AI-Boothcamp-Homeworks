@@ -36,7 +36,9 @@ export async function POST(
           language: String(formData.get("language")),
         },
         asr: undefined,
-        turn: undefined,
+        turn: {
+          turn_timeout: 3,
+        },
         tts: {
           model_id: undefined,
           voice_id: String(formData.get("voice")),
@@ -53,6 +55,7 @@ export async function POST(
               prompt: {
                 prompt: true,
               },
+              language: true,
             },
           },
         },
@@ -124,13 +127,17 @@ export async function GET(
 
     // Fetch full agent details from ElevenLabs
     const agentDetails = await Promise.all(
-      agents.map(async (agent) => {
-        const details = await client.conversationalAi.getAgent(agent.agentId);
-        return {
-          ...details,
-          ...agent.toObject(),
-        };
-      })
+      agents
+        .map(async (agent) => {
+          const details = await client.conversationalAi.getAgent(agent.agentId);
+          if (details) {
+            return {
+              ...details,
+              ...agent.toObject(),
+            };
+          }
+        })
+        .filter(Boolean)
     );
 
     return NextResponse.json(agentDetails);

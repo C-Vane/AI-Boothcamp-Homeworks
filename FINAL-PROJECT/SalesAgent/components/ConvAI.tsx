@@ -60,6 +60,44 @@ async function callEnded(conversationId: string, projectId: ObjectId) {
   });
 }
 
+async function getUserAvailability({
+  campaignId,
+  startDate,
+  endDate,
+}: {
+  campaignId: string;
+  startDate: string;
+  endDate: string;
+}) {
+  const response = await fetch(
+    `/api/calendar/availability?campaignId=${campaignId}&startDate=${startDate}&endDate=${endDate}`
+  );
+  if (!response.ok) {
+    throw Error("Failed to get availability");
+  }
+  const { availability } = await response.json();
+  return availability;
+}
+
+async function scheduleMeeting(params: {
+  campaignId: string;
+  leadId: ObjectId;
+  leadEmail: string;
+  startTime: string;
+  duration: number;
+  title: string;
+  description: string;
+}) {
+  console.log(params);
+  await fetch(`/api/calendar/schedule`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(params),
+  });
+}
+
 export function ConvAI({
   agentId,
   lead,
@@ -88,7 +126,9 @@ export function ConvAI({
 
       const signedUrl = await getSignedUrl(agentId);
 
-      console.log("Signed URL:", signedUrl);
+      console.log({
+        agent,
+      });
 
       const conversation = await Conversation.startSession({
         signedUrl: signedUrl,
@@ -109,6 +149,7 @@ export function ConvAI({
           setIsSpeaking(false);
         },
         onError: (error) => {
+          console.log(error);
           toast({
             variant: "destructive",
             title: "Connection Error",
@@ -118,14 +159,24 @@ export function ConvAI({
         onModeChange: ({ mode }) => {
           setIsSpeaking(mode === "speaking");
         },
+        clientTools: {
+          getUserAvailability: (params) =>
+            getUserAvailability({ ...params, campaignId: lead.campaignId }),
+          scheduleMeeting: (params) =>
+            scheduleMeeting({ ...params, campaignId: lead.campaignId }),
+          endCall: () => endConversation(),
+        },
       });
+
+      console.log(conversation);
 
       const conversationId = conversation.getId();
 
       saveConversationId(agentId, conversationId, lead._id, lead.campaignId);
 
       setConversation(conversation);
-    } catch {
+    } catch (error) {
+      console.log(error);
       toast({
         variant: "destructive",
         title: "Error",

@@ -70,7 +70,7 @@ Lead Information:
   // Add personality wrapper if provided
   const personalityWrapper = personality
     ? PersonalityPrompts[personality]
-    : PersonalityPrompts[Personality.highEnergy];
+    : PersonalityPrompts[Personality.sarcastic];
 
   // Combine all components
   return `
@@ -83,6 +83,8 @@ Lead Information:
           ${personalityWrapper}
 
           ${leadInfo}
+
+          Today: ${new Date().toLocaleString()}
 
           Remember to maintain the specified personality while following the original instructions and considering the lead's context.
 `;
